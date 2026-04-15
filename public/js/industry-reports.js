@@ -44,6 +44,38 @@ function getUserEmail() {
     return (localStorage.getItem("userEmail") || "").trim();
 }
 
+function pickIndustryDisplayName(profile) {
+    if (!profile || typeof profile !== "object") return "";
+    const candidates = [
+        profile.industry_name,
+        profile.facility_name,
+        profile.organization_name,
+        profile.company_name
+    ];
+    for (const value of candidates) {
+        const cleaned = String(value || "").trim();
+        if (cleaned) return cleaned;
+    }
+    return "";
+}
+
+async function resolveIndustryDisplayName(userEmail) {
+    if (!userEmail) return "Industry User";
+
+    try {
+        const res = await fetch(`/industry-profile-status?user_email=${encodeURIComponent(userEmail)}`);
+        const data = await res.json().catch(() => ({}));
+        if (res.ok) {
+            const profileName = pickIndustryDisplayName(data.profile);
+            if (profileName) return profileName;
+        }
+    } catch {
+        // Fall through to safe default.
+    }
+
+    return "Industry User";
+}
+
 function logout() {
     localStorage.removeItem("userEmail");
     window.location.replace("index.html");
@@ -422,16 +454,7 @@ function initComposeMessageModal() {
     btnCompose.addEventListener("click", async () => {
         const email = getUserEmail();
         if (!email) return;
-        let facilityName = email;
-        try {
-            const res = await fetch(`/industry-profile-status?user_email=${encodeURIComponent(email)}`);
-            const data = await res.json();
-            if (data.profile && data.profile.industry_name) {
-                facilityName = String(data.profile.industry_name).trim() || facilityName;
-            }
-        } catch {
-            /* keep fallback */
-        }
+        const facilityName = await resolveIndustryDisplayName(email);
         ta.value = `Subject: EnviroMonitor – Agency inquiry
 
 Dear Environmental Monitoring Team,
@@ -484,7 +507,12 @@ function init() {
     if (!email) return;
 
     const emailEl = document.getElementById("industryNameDisplay");
-    if (emailEl) emailEl.textContent = email;
+    if (emailEl) {
+        emailEl.textContent = "Industry User";
+        resolveIndustryDisplayName(email).then((displayName) => {
+            emailEl.textContent = displayName || "Industry User";
+        });
+    }
 
     document.getElementById("btnLogout").addEventListener("click", logout);
     initComposeMessageModal();

@@ -31,6 +31,69 @@
     window.smoothNavigate = smoothNavigate;
 })();
 
+const PROFESSIONAL_EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const EMAIL_VALIDATION_MESSAGE = "Please enter a valid professional email address";
+
+function normalizeEmail(value) {
+    return String(value || "").trim();
+}
+
+function isValidProfessionalEmail(value) {
+    const email = normalizeEmail(value);
+    if (!email || /\s/.test(email)) return false;
+    return PROFESSIONAL_EMAIL_REGEX.test(email);
+}
+
+function validateEmailInputElement(input) {
+    if (!input) return false;
+    const normalized = normalizeEmail(input.value);
+    if (input.value !== normalized) input.value = normalized;
+
+    const isValid = isValidProfessionalEmail(normalized);
+    input.setCustomValidity(isValid ? "" : EMAIL_VALIDATION_MESSAGE);
+    return isValid;
+}
+
+function ensureEmailInputValid(input) {
+    const isValid = validateEmailInputElement(input);
+    if (!isValid) {
+        input.reportValidity();
+        input.focus();
+    }
+    return isValid;
+}
+
+function setupGlobalEmailValidation() {
+    document.querySelectorAll('input[type="email"]').forEach((input) => {
+        input.setAttribute("pattern", "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}");
+        input.setAttribute("title", EMAIL_VALIDATION_MESSAGE);
+
+        input.addEventListener("input", () => {
+            validateEmailInputElement(input);
+        });
+
+        input.addEventListener("change", () => {
+            validateEmailInputElement(input);
+        });
+
+        input.addEventListener("blur", () => {
+            const hasValue = normalizeEmail(input.value) !== "";
+            const isValid = validateEmailInputElement(input);
+            if (hasValue && !isValid) {
+                input.reportValidity();
+            }
+        });
+
+        validateEmailInputElement(input);
+    });
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupGlobalEmailValidation);
+} else {
+    setupGlobalEmailValidation();
+}
+
 /* Home Page Logic */
 (() => {
     if (!document.getElementById('loginForm')) {
@@ -56,7 +119,9 @@ function showLogin() {
 
 // REGISTER
 async function register() {
-    let email = document.getElementById("regEmail").value.trim();
+    const regEmailInput = document.getElementById("regEmail");
+    let email = normalizeEmail(regEmailInput?.value);
+    if (regEmailInput) regEmailInput.value = email;
     let password = document.getElementById("regPassword").value.trim();
     let confirmPassword = document.getElementById("confirmPassword").value.trim();
     let role = document.getElementById("role").value;
@@ -68,6 +133,10 @@ async function register() {
 
     if (password !== confirmPassword) {
         alert("Passwords do not match!");
+        return;
+    }
+
+    if (!ensureEmailInputValid(regEmailInput)) {
         return;
     }
 
@@ -106,12 +175,20 @@ async function register() {
 
 // LOGIN
 async function login() {
-    let email = document.getElementById("loginEmail").value.trim();
+    const loginEmailInput = document.getElementById("loginEmail");
+    let email = normalizeEmail(loginEmailInput?.value);
+    if (loginEmailInput) loginEmailInput.value = email;
     let password = document.getElementById("loginPassword").value.trim();
 
     if (!email || !password) {
         document.getElementById("result").style.color = "#dc2626";
         document.getElementById("result").innerText = "Please enter email and password";
+        return;
+    }
+
+    if (!ensureEmailInputValid(loginEmailInput)) {
+        document.getElementById("result").style.color = "#dc2626";
+        document.getElementById("result").innerText = EMAIL_VALIDATION_MESSAGE;
         return;
     }
 
@@ -292,12 +369,16 @@ async function handleIndustryEntryFlow() {
 
 window.saveAgencyProfile = async function() {
     let userEmail = localStorage.getItem("userEmail");
+    const agencyEmailInput = document.getElementById("email");
+    const normalizedUserEmail = normalizeEmail(userEmail);
+    const normalizedAgencyEmail = normalizeEmail(agencyEmailInput?.value);
+    if (agencyEmailInput) agencyEmailInput.value = normalizedAgencyEmail;
 
     let data = {
-        user_email: userEmail,
+        user_email: normalizedUserEmail,
         agency_name: document.getElementById("agency_name").value.trim(),
         owner_name: document.getElementById("owner_name").value.trim(),
-        email: document.getElementById("email").value.trim(),
+        email: normalizedAgencyEmail,
         phone: document.getElementById("phone").value.trim()
     };
 
@@ -309,6 +390,16 @@ window.saveAgencyProfile = async function() {
 
     if (missingFields.length > 0) {
         alert("Please fill the following required fields:\n\n" + missingFields.join("\n"));
+        return;
+    }
+
+    if (!isValidProfessionalEmail(data.user_email)) {
+        alert("Session email is invalid. Please login again.");
+        window.location.href = "h.html";
+        return;
+    }
+
+    if (!ensureEmailInputValid(agencyEmailInput)) {
         return;
     }
 
@@ -408,16 +499,20 @@ updateProgress();
 
 async function saveData() {
     let userEmail = localStorage.getItem("userEmail");
+    const industryEmailInput = document.getElementById("email");
+    const normalizedUserEmail = normalizeEmail(userEmail);
+    const normalizedIndustryEmail = normalizeEmail(industryEmailInput?.value);
+    if (industryEmailInput) industryEmailInput.value = normalizedIndustryEmail;
 
     let data = {
-        user_email: userEmail,
+        user_email: normalizedUserEmail,
         industry_name: document.getElementById("industry_name").value.trim(),
         industry_type: document.getElementById("industry_type").value.trim(),
         industry_id: document.getElementById("industry_id").value.trim(),
         address: document.getElementById("address").value.trim(),
         contact_name: document.getElementById("contact_name").value.trim(),
         role_designation: document.getElementById("role_designation").value.trim(),
-        email: document.getElementById("email").value.trim(),
+        email: normalizedIndustryEmail,
         phone: document.getElementById("phone").value.trim(),
         alt_phone: document.getElementById("alt_phone").value.trim(),
         monitoring_frequency: document.getElementById("monitoring_frequency").value.trim(),
@@ -441,6 +536,17 @@ async function saveData() {
     if (missingFields.length > 0) {
         highlightSectionByField(missingFields[0].key);
         alert("Please fill the following required fields:\n\n" + missingFields.map(field => field.label).join("\n"));
+        return;
+    }
+
+    if (!isValidProfessionalEmail(data.user_email)) {
+        alert("Session email is invalid. Please login again.");
+        window.location.href = "h.html";
+        return;
+    }
+
+    if (!ensureEmailInputValid(industryEmailInput)) {
+        highlightSectionByField("email");
         return;
     }
 
@@ -476,16 +582,20 @@ async function saveData() {
 
 async function submitForReview() {
     let userEmail = localStorage.getItem("userEmail");
+    const industryEmailInput = document.getElementById("email");
+    const normalizedUserEmail = normalizeEmail(userEmail);
+    const normalizedIndustryEmail = normalizeEmail(industryEmailInput?.value);
+    if (industryEmailInput) industryEmailInput.value = normalizedIndustryEmail;
 
     let data = {
-        user_email: userEmail,
+        user_email: normalizedUserEmail,
         industry_name: document.getElementById("industry_name").value.trim(),
         industry_type: document.getElementById("industry_type").value.trim(),
         industry_id: document.getElementById("industry_id").value.trim(),
         address: document.getElementById("address").value.trim(),
         contact_name: document.getElementById("contact_name").value.trim(),
         role_designation: document.getElementById("role_designation").value.trim(),
-        email: document.getElementById("email").value.trim(),
+        email: normalizedIndustryEmail,
         phone: document.getElementById("phone").value.trim(),
         alt_phone: document.getElementById("alt_phone").value.trim(),
         monitoring_frequency: document.getElementById("monitoring_frequency").value.trim(),
@@ -509,6 +619,17 @@ async function submitForReview() {
     if (missingFields.length > 0) {
         highlightSectionByField(missingFields[0].key);
         alert("Please fill the following required fields before submitting for review:\n\n" + missingFields.map(field => field.label).join("\n"));
+        return;
+    }
+
+    if (!isValidProfessionalEmail(data.user_email)) {
+        alert("Session email is invalid. Please login again.");
+        window.location.href = "h.html";
+        return;
+    }
+
+    if (!ensureEmailInputValid(industryEmailInput)) {
+        highlightSectionByField("email");
         return;
     }
 
