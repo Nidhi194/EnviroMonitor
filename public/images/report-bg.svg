@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="1754" viewBox="0 0 1240 1754">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&amp;family=Playfair+Display:wght@700&amp;display=swap');
+      .tl-text { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 18px; fill: #1D6B4E; letter-spacing: 2px; }
+      .bg-text-enviro, .bg-text-monitor { font-family: 'Playfair Display', serif; font-weight: 700; fill: #D6E8E2; }
+      .bg-text-enviro { font-size: 130px; letter-spacing: 8px; }
+      .bg-text-monitor { font-size: 130px; letter-spacing: 12px; }
+      .bg-text-sub { font-family: 'Montserrat', sans-serif; font-size: 22px; fill: #E2EFE9; letter-spacing: 10px; font-weight: 700; }
+      .footer-txt { font-family: 'Montserrat', sans-serif; font-size: 16px; fill: #B0B0B0; letter-spacing: 4px; font-weight: 700; }
+    </style>
+  </defs>
+
+  <rect width="1240" height="1754" fill="#ffffff"/>
+
+  <g transform="translate(50, 50) scale(1)">
+    <polygon points="50,0 100,28.8 100,86.6 50,115.4 0,86.6 0,28.8" fill="#308a68"/>
+    <rect x="22" y="80" width="12" height="20" fill="#ffffff" opacity="0.9"/>
+    <rect x="44" y="60" width="12" height="40" fill="#ffffff" opacity="0.9"/>
+    <rect x="66" y="40" width="12" height="60" fill="#ffffff" opacity="0.9"/>
+    <line x1="16" y1="46" x2="84" y2="46" stroke="#ffffff" stroke-width="2" stroke-dasharray="4,4"/>
+  </g>
+  <text x="165" y="88" class="tl-text">ENVIRO</text>
+  <text x="165" y="112" class="tl-text">MONITOR</text>
+
+  <g transform="translate(620, 850)">
+    <g transform="translate(0, -320)">
+      <g transform="scale(3.4) translate(-50, -57.7)">
+        <polygon points="50,0 100,28.8 100,86.6 50,115.4 0,86.6 0,28.8" fill="#DCEFE7"/>
+        <rect x="22" y="80" width="12" height="20" fill="#ffffff"/>
+        <rect x="44" y="60" width="12" height="40" fill="#ffffff"/>
+        <rect x="66" y="40" width="12" height="60" fill="#ffffff"/>
+        <line x1="16" y1="46" x2="84" y2="46" stroke="#ffffff" stroke-width="2" stroke-dasharray="4,4"/>
+      </g>
+      <path d="M 200,-30 A 80,80 0 0,1 200,130" stroke="#E6F2EC" stroke-width="4" fill="none"/>
+      <path d="M 230,-60 A 130,130 0 0,1 230,160" stroke="#E6F2EC" stroke-width="2" fill="none"/>
+      <path d="M 260,-90 A 180,180 0 0,1 260,190" stroke="#E6F2EC" stroke-width="1" fill="none"/>
+    </g>
+    <text x="0" y="-80" class="bg-text-enviro" text-anchor="middle">ENVIRO</text>
+    <text x="0" y="40" class="bg-text-monitor" text-anchor="middle">MONITOR</text>
+    <text x="0" y="110" class="bg-text-sub" text-anchor="middle">AQI · COMPLIANCE · REPORTING</text>
+  </g>
+
+  <line x1="60" y1="1680" x2="1180" y2="1680" stroke="#E5E5E5" stroke-width="2"/>
+  <text x="620" y="1710" class="footer-txt" text-anchor="middle">ENVIROMONITOR · ENVIRONMENTAL COMPLIANCE PLATFORM</text>
+  <rect x="0" y="1734" width="1240" height="20" fill="#1D6B4E"/>
+</svg>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="rgba(16,185,129,0.28)"/>
+      <stop offset="1" stop-color="rgba(14,165,233,0.22)"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="rgba(255,255,255,0.55)"/>
+      <stop offset="1" stop-color="rgba(255,255,255,0.1)"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" rx="48" fill="url(#g1)"/>
+  <rect x="70" y="80" width="1060" height="640" rx="32" fill="rgba(255,255,255,0.22)" stroke="rgba(255,255,255,0.35)"/>
+  <rect x="110" y="140" width="520" height="210" rx="20" fill="url(#g2)"/>
+  <rect x="650" y="140" width="440" height="210" rx="20" fill="rgba(255,255,255,0.18)"/>
+  <rect x="110" y="380" width="980" height="300" rx="24" fill="rgba(15,23,42,0.12)"/>
+  <path d="M150 620 C 260 540, 360 560, 470 500 S 710 420, 840 470 S 1010 540, 1060 470"
+        fill="none" stroke="rgba(255,255,255,0.65)" stroke-width="8" stroke-linecap="round"/>
+  <path d="M150 620 C 260 560, 360 590, 470 540 S 710 470, 840 510 S 1010 600, 1060 520"
+        fill="none" stroke="rgba(16,185,129,0.75)" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="470" cy="500" r="10" fill="rgba(255,255,255,0.85)"/>
+  <circle cx="840" cy="470" r="10" fill="rgba(255,255,255,0.85)"/>
+</svg>
+
