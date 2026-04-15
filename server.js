@@ -75,6 +75,26 @@ const db = mysql.createPool({
 
 const dbPromise = db.promise();
 
+const PROFESSIONAL_EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+function normalizeEmail(value) {
+    return String(value || '').trim().toLowerCase();
+}
+
+function isValidProfessionalEmail(value) {
+    const email = normalizeEmail(value);
+    if (!email || /\s/.test(email)) return false;
+    return PROFESSIONAL_EMAIL_REGEX.test(email);
+}
+
+function requireValidEmail(res, value, fieldLabel = 'email') {
+    if (!isValidProfessionalEmail(value)) {
+        res.status(400).json({ error: `Invalid ${fieldLabel}. Please enter a valid professional email address.` });
+        return null;
+    }
+    return normalizeEmail(value);
+}
+
 function toNumber(value) {
     const num = parseFloat(value);
     return Number.isFinite(num) ? num : 0;
@@ -278,8 +298,13 @@ app.post('/api/schedule-check', (req, res) => {
         return res.status(400).json({ error: 'Missing required parameters' });
     }
 
+    const normalizedAgencyEmail = requireValidEmail(res, agencyEmail, 'agency email');
+    if (!normalizedAgencyEmail) return;
+    const normalizedIndustryEmail = requireValidEmail(res, industryEmail, 'industry email');
+    if (!normalizedIndustryEmail) return;
+
     const sql = 'INSERT INTO scheduled_checks (agency_email, industry_name, industry_email, scheduled_date) VALUES (?, ?, ?, ?)';
-    db.query(sql, [agencyEmail, industryName, industryEmail, scheduledDate], (err) => {
+    db.query(sql, [normalizedAgencyEmail, String(industryName || '').trim(), normalizedIndustryEmail, scheduledDate], (err) => {
         if (err) {
             console.log('Schedule Check Error:', err.message);
             return res.status(500).json({ error: 'Failed to save schedule' });
@@ -291,6 +316,8 @@ app.post('/api/schedule-check', (req, res) => {
 app.get('/api/upcoming-checks', (req, res) => {
     const userEmail = req.query.user_email;
     if (!userEmail) return res.status(400).json({ error: 'user_email is required' });
+    const normalizedUserEmail = requireValidEmail(res, userEmail, 'user email');
+    if (!normalizedUserEmail) return;
 
     // Using a grouped subquery prevents duplicate rows if an agency saved their profile multiple times
     const sql = `
@@ -304,7 +331,7 @@ app.get('/api/upcoming-checks', (req, res) => {
         WHERE sc.industry_email = ? AND sc.status = "Pending" AND sc.scheduled_date >= CURDATE() 
         ORDER BY sc.scheduled_date ASC
     `;
-    db.query(sql, [userEmail], (err, result) => {
+    db.query(sql, [normalizedUserEmail], (err, result) => {
         if (err) {
             console.log('Upcoming Checks Fetch Error:', err.message);
             return res.status(500).json({ error: 'Database error' });
@@ -316,9 +343,11 @@ app.get('/api/upcoming-checks', (req, res) => {
 app.get('/api/agency-schedules', (req, res) => {
     const agencyEmail = req.query.agency_email;
     if (!agencyEmail) return res.status(400).json({ error: 'agency_email is required' });
+    const normalizedAgencyEmail = requireValidEmail(res, agencyEmail, 'agency email');
+    if (!normalizedAgencyEmail) return;
 
     const sql = 'SELECT * FROM scheduled_checks WHERE agency_email = ? ORDER BY scheduled_date DESC, id DESC';
-    db.query(sql, [agencyEmail], (err, result) => {
+    db.query(sql, [normalizedAgencyEmail], (err, result) => {
         if (err) {
             console.log('Agency Schedules Fetch Error:', err.message);
             return res.status(500).json({ error: 'Database error' });
@@ -335,8 +364,11 @@ app.put('/api/schedule-check/:id', (req, res) => {
         return res.status(400).json({ error: 'status and agencyEmail are required' });
     }
 
+    const normalizedAgencyEmail = requireValidEmail(res, agencyEmail, 'agency email');
+    if (!normalizedAgencyEmail) return;
+
     const sql = 'UPDATE scheduled_checks SET status = ? WHERE id = ? AND agency_email = ?';
-    db.query(sql, [status, id, agencyEmail], (err) => {
+    db.query(sql, [status, id, normalizedAgencyEmail], (err) => {
         if (err) {
             console.log('Update Schedule Error:', err.message);
             return res.status(500).json({ error: 'Failed to update schedule status' });
@@ -353,11 +385,14 @@ app.post('/register', authLimiter, async (req, res) => {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
+    const normalizedEmail = requireValidEmail(res, email, 'email');
+    if (!normalizedEmail) return;
+
     const sql = 'INSERT INTO users (email, password, role) VALUES (?, ?, ?)';
 
     try {
         const hashed = await bcrypt.hash(String(password), 12);
-        db.query(sql, [String(email).trim(), hashed, String(role).trim()], (err) => {
+        db.query(sql, [normalizedEmail, hashed, String(role).trim()], (err) => {
         if (err) {
             console.log('Register Error:', err.message);
             return res.json({ error: 'User already exists or database error' });
@@ -379,9 +414,12 @@ app.post('/login', authLimiter, (req, res) => {
         return res.status(400).json({ error: 'Email and password are required' });
     }
 
+    const normalizedEmail = requireValidEmail(res, email, 'email');
+    if (!normalizedEmail) return;
+
     const sql = 'SELECT * FROM users WHERE email = ? LIMIT 1';
 
-    db.query(sql, [String(email).trim()], async (err, result) => {
+    db.query(sql, [normalizedEmail], async (err, result) => {
         if (err) {
             console.log('Login Error:', err.message);
             return res.json({ error: 'Database error' });
@@ -452,7 +490,9 @@ app.post('/login', authLimiter, (req, res) => {
 // CHECK AGENCY PROFILE
 app.post('/check-agency-profile', (req, res) => {
     const { email } = req.body;
-    db.query('SELECT * FROM agency_details WHERE user_email = ?', [email], (err, result) => {
+    const normalizedEmail = requireValidEmail(res, email, 'email');
+    if (!normalizedEmail) return;
+    db.query('SELECT * FROM agency_details WHERE user_email = ?', [normalizedEmail], (err, result) => {
         if (err) {
             return res.json({ error: err.message });
         }
@@ -463,7 +503,9 @@ app.post('/check-agency-profile', (req, res) => {
 // CHECK INDUSTRY PROFILE
 app.post('/check-industry-profile', (req, res) => {
     const { email } = req.body;
-    db.query('SELECT id FROM industry_details WHERE user_email = ?', [email], (err, result) => {
+    const normalizedEmail = requireValidEmail(res, email, 'email');
+    if (!normalizedEmail) return;
+    db.query('SELECT id FROM industry_details WHERE user_email = ?', [normalizedEmail], (err, result) => {
         if (err) {
             return res.json({ error: err.message });
         }
@@ -479,15 +521,20 @@ app.post('/save-agency-profile', (req, res) => {
         return res.json({ error: 'All fields are required.' });
     }
 
+    const normalizedUserEmail = requireValidEmail(res, data.user_email, 'user email');
+    if (!normalizedUserEmail) return;
+    const normalizedContactEmail = requireValidEmail(res, data.email, 'contact email');
+    if (!normalizedContactEmail) return;
+
     const sql = `
         INSERT INTO agency_details (user_email, agency_name, owner_name, email, phone) 
         VALUES (?, ?, ?, ?, ?)
     `;
     db.query(sql, [
-        data.user_email.trim(),
+        normalizedUserEmail,
         data.agency_name.trim(),
         data.owner_name.trim(),
-        data.email.trim(),
+        normalizedContactEmail,
         data.phone.trim()
     ], (err) => {
         if (err) {
@@ -522,15 +569,20 @@ app.post('/save-industry', (req, res) => {
         });
     }
 
+    const normalizedUserEmail = requireValidEmail(res, data.user_email, 'user login email');
+    if (!normalizedUserEmail) return;
+    const normalizedContactEmail = requireValidEmail(res, data.email, 'email');
+    if (!normalizedContactEmail) return;
+
     const payload = [
-        String(data.user_email).trim(),
+        normalizedUserEmail,
         String(data.industry_name).trim(),
         String(data.industry_type).trim(),
         String(data.industry_id).trim(),
         String(data.address).trim(),
         String(data.contact_name).trim(),
         String(data.role_designation).trim(),
-        String(data.email).trim(),
+        normalizedContactEmail,
         String(data.phone).trim(),
         data.alt_phone ? String(data.alt_phone).trim() : '',
         String(data.monitoring_frequency).trim(),
@@ -610,15 +662,20 @@ app.post('/submit-industry-review', (req, res) => {
         });
     }
 
+    const normalizedUserEmail = requireValidEmail(res, data.user_email, 'user login email');
+    if (!normalizedUserEmail) return;
+    const normalizedContactEmail = requireValidEmail(res, data.email, 'email');
+    if (!normalizedContactEmail) return;
+
     const payload = [
-        String(data.user_email).trim(),
+        normalizedUserEmail,
         String(data.industry_name).trim(),
         String(data.industry_type).trim(),
         String(data.industry_id).trim(),
         String(data.address).trim(),
         String(data.contact_name).trim(),
         String(data.role_designation).trim(),
-        String(data.email).trim(),
+        normalizedContactEmail,
         String(data.phone).trim(),
         data.alt_phone ? String(data.alt_phone).trim() : '',
         String(data.monitoring_frequency).trim(),
@@ -682,8 +739,11 @@ app.get('/industry-profile-status', async (req, res) => {
         return res.status(400).json({ error: 'user_email is required' });
     }
 
+    const normalizedUserEmail = requireValidEmail(res, userEmail, 'user email');
+    if (!normalizedUserEmail) return;
+
     try {
-        const profile = await getIndustryProfileByUserEmail(userEmail);
+        const profile = await getIndustryProfileByUserEmail(normalizedUserEmail);
         res.json({
             hasIndustryProfile: Boolean(profile),
             profile
@@ -702,8 +762,11 @@ app.get('/industry-reports', async (req, res) => {
         return res.status(400).json({ error: 'user_email is required' });
     }
 
+    const normalizedUserEmail = requireValidEmail(res, userEmail, 'user email');
+    if (!normalizedUserEmail) return;
+
     try {
-        const profile = await getIndustryProfileByUserEmail(userEmail);
+        const profile = await getIndustryProfileByUserEmail(normalizedUserEmail);
 
         if (!profile) {
             return res.json({ reports: [] });
@@ -740,6 +803,8 @@ app.post('/report-industry-issue', (req, res) => {
         return res.status(400).json({ error: 'Please fill all required fields' });
     }
 
+    if (!requireValidEmail(res, user_email, 'user email')) return;
+
     res.json({ message: 'Issue submitted successfully' });
 });
 
@@ -760,6 +825,8 @@ app.get('/get-industries', (req, res) => {
 // SAVE PM10 DATA
 app.post('/save-pm10', (req, res) => {
     const data = req.body;
+    const normalizedUserEmail = requireValidEmail(res, data.user_email, 'user email');
+    if (!normalizedUserEmail) return;
 
     const T = 480;
 
@@ -806,9 +873,9 @@ app.post('/save-pm10', (req, res) => {
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
-    db.query('DELETE FROM pm10_data WHERE user_email=? AND industry_name=? AND monitoring_date=?', [data.user_email || '', data.industry_name || '', data.monitoring_date || ''], () => {
+    db.query('DELETE FROM pm10_data WHERE user_email=? AND industry_name=? AND monitoring_date=?', [normalizedUserEmail, data.industry_name || '', data.monitoring_date || ''], () => {
         db.query(sql, [
-            data.user_email || '',
+            normalizedUserEmail,
             data.industry_name,
             data.location,
             data.monitoring_date,
@@ -844,7 +911,10 @@ app.post('/save-so2', (req, res) => {
             cleanData[key] = toNumber(data[key]);
         }
     }
-    db.query('DELETE FROM so2_data WHERE user_email=? AND industry_name=? AND monitoring_date=?', [cleanData.user_email || '', cleanData.industry_name || '', cleanData.monitoring_date || ''], () => {
+    const normalizedUserEmail = requireValidEmail(res, cleanData.user_email, 'user email');
+    if (!normalizedUserEmail) return;
+    cleanData.user_email = normalizedUserEmail;
+    db.query('DELETE FROM so2_data WHERE user_email=? AND industry_name=? AND monitoring_date=?', [normalizedUserEmail, cleanData.industry_name || '', cleanData.monitoring_date || ''], () => {
         db.query('INSERT INTO so2_data SET ?', cleanData, (err) => {
             if (err) {
                 console.log('Save SO2 Error:', err.message);
@@ -866,7 +936,10 @@ app.post('/save-no2', (req, res) => {
             cleanData[key] = toNumber(data[key]);
         }
     }
-    db.query('DELETE FROM no2_data WHERE user_email=? AND industry_name=? AND monitoring_date=?', [cleanData.user_email || '', cleanData.industry_name || '', cleanData.monitoring_date || ''], () => {
+    const normalizedUserEmail = requireValidEmail(res, cleanData.user_email, 'user email');
+    if (!normalizedUserEmail) return;
+    cleanData.user_email = normalizedUserEmail;
+    db.query('DELETE FROM no2_data WHERE user_email=? AND industry_name=? AND monitoring_date=?', [normalizedUserEmail, cleanData.industry_name || '', cleanData.monitoring_date || ''], () => {
         db.query('INSERT INTO no2_data SET ?', cleanData, (err) => {
             if (err) {
                 console.log('Save NO2 Error:', err.message);
@@ -880,6 +953,8 @@ app.post('/save-no2', (req, res) => {
 // SAVE PM2.5 DATA
 app.post('/save-pm25', (req, res) => {
     const data = req.body;
+    const normalizedUserEmail = requireValidEmail(res, data.user_email, 'user email');
+    if (!normalizedUserEmail) return;
 
     const q1 = parseFloat(data.q1) || 0;
     const q2 = parseFloat(data.q2) || 0;
@@ -901,9 +976,9 @@ app.post('/save-pm25', (req, res) => {
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
-    db.query('DELETE FROM pm25_data WHERE user_email=? AND industry_name=? AND monitoring_date=?', [data.user_email || '', data.industry_name || '', data.monitoring_date || ''], () => {
+    db.query('DELETE FROM pm25_data WHERE user_email=? AND industry_name=? AND monitoring_date=?', [normalizedUserEmail, data.industry_name || '', data.monitoring_date || ''], () => {
         db.query(sql, [
-            data.user_email || '',
+            normalizedUserEmail,
             data.industry_name,
             data.location,
             data.monitoring_date,
@@ -936,9 +1011,11 @@ app.post('/save-pm25', (req, res) => {
 app.get('/api/reports', async (req, res) => {
     const userEmail = req.query.user_email;
     if (!userEmail) return res.json({ error: 'user_email required' });
+    const normalizedUserEmail = requireValidEmail(res, userEmail, 'user email');
+    if (!normalizedUserEmail) return;
 
     try {
-        const profile = await getIndustryProfileByUserEmail(userEmail);
+        const profile = await getIndustryProfileByUserEmail(normalizedUserEmail);
         
         let whereClause = "";
         let queryParams = [];
@@ -949,7 +1026,7 @@ app.get('/api/reports', async (req, res) => {
             queryParams = [industryName];
         } else {
             whereClause = "WHERE user_email = ?";
-            queryParams = [userEmail];
+            queryParams = [normalizedUserEmail];
         }
 
         // Industry users only see published reports. Drafts use status = 'Pending' (see saveAsDraft in app.js).
@@ -1061,6 +1138,8 @@ app.get('/api/reports/summary/:id', async (req, res) => {
 app.get('/agency-dashboard-data', async (req, res) => {
     const userEmail = req.query.user_email;
     if (!userEmail) return res.status(400).json({ error: 'user_email required' });
+    const normalizedUserEmail = requireValidEmail(res, userEmail, 'user email');
+    if (!normalizedUserEmail) return;
 
     try {
         const [rows] = await dbPromise.query(`
@@ -1068,7 +1147,7 @@ app.get('/agency-dashboard-data', async (req, res) => {
             FROM pm10_data
             WHERE user_email = ?
             ORDER BY id DESC
-        `, [userEmail]);
+        `, [normalizedUserEmail]);
 
         let pendingCount = 0;
         let overdueCount = 0;
@@ -1116,6 +1195,8 @@ app.get('/agency-dashboard-data', async (req, res) => {
 // SAVE FULL AGENCY REPORT DATA AT ONCE
 app.post('/save-agency-report', async (req, res) => {
     const data = req.body || {};
+    const normalizedUserEmail = requireValidEmail(res, data.user_email, 'user email');
+    if (!normalizedUserEmail) return;
     const industry_name = String(data.industry_name || '').trim();
     const location = String(data.location || '').trim();
     const monitoring_date = String(data.monitoring_date || '').trim();
@@ -1125,7 +1206,10 @@ app.post('/save-agency-report', async (req, res) => {
     }
 
     try {
-        const metrics = await insertAgencyCombinedReport(data);
+        const metrics = await insertAgencyCombinedReport({
+            ...data,
+            user_email: normalizedUserEmail
+        });
         res.json({
             success: true,
             message: 'Agency report saved successfully',
