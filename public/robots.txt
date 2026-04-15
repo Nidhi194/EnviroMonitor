@@ -1,0 +1,12 @@
+User-agent: *
+
+Allow: /
+Allow: /pages/agency.html
+
+Disallow: /pages/h.html
+Disallow: /pages/agency-info.html
+Disallow: /pages/agency-dash.html
+Disallow: /pages/industry.html
+Disallow: /pages/industry-reports.html
+
+Sitemap: https://enviromonitor.in/sitemap.xml
