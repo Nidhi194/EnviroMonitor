@@ -412,7 +412,7 @@
             <div id="loginForm" style="display: flex; flex-direction: column; gap: 10px;">
                 <div class="form-group">
                     <label for="loginEmail">Email</label>
-                    <input id="loginEmail" type="email" placeholder="Enter email address">
+                    <input id="loginEmail" type="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Please enter a valid professional email address" placeholder="Enter email address">
                 </div>
 
                 <div class="form-group">
@@ -482,7 +482,7 @@
 
                 <div class="form-group">
                     <label for="regEmail">Email</label>
-                    <input id="regEmail" type="email" placeholder="Create email address">
+                    <input id="regEmail" type="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Please enter a valid professional email address" placeholder="Create email address">
                 </div>
 
                 <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
