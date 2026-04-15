@@ -4,10 +4,10 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
     gap: 22px;
-    min-height: calc(100vh - 82px);
-    padding: 28px 34px 42px;
+    padding: 28px 34px 24px;
     background: linear-gradient(180deg, #eef4fa, #e9eff6 50%, #e7edf5 100%);
     align-items: start;
+    align-content: start;
 }
 
 .reports-main {
@@ -112,7 +112,7 @@
     font-size: 0.86rem;
     font-weight: 700;
     color: #ffffff;
-    word-break: break-all;
+    word-break: break-word;
     line-height: 1.25;
 }
 
@@ -149,8 +149,12 @@
 }
 
 .reports-aside {
-    position: sticky;
-    top: 102px;
+    align-self: start;
+}
+
+.reports-main > .section-card:last-child,
+.reports-aside > .section-card:last-child {
+    margin-bottom: 0;
 }
 
 .issue-card {
