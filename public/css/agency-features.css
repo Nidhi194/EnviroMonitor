@@ -1,0 +1,161 @@
+/* Agency Dashboard Specific Cool Features */
+
+/* 1. Real-Time Alert Ticker */
+.alert-ticker {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 12px;
+    padding: 10px 16px;
+    margin-top: 16px;
+    display: flex;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(2, 44, 34, 0.05);
+}
+
+.alert-ticker::before, .alert-ticker::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 60px;
+    height: 100%;
+    z-index: 2;
+}
+
+.alert-ticker::before {
+    left: 0;
+    background: linear-gradient(to right, rgba(238, 244, 250, 0.8), transparent);
+}
+
+.alert-ticker::after {
+    right: 0;
+    background: linear-gradient(to left, rgba(238, 244, 250, 0.8), transparent);
+}
+
+.alert-ticker-track {
+    display: flex;
+    gap: 40px;
+    animation: tickerScroll 30s linear infinite;
+    font-size: 0.84rem;
+    font-weight: 700;
+}
+
+.alert-ticker-track span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.alert-ticker-track i.fa-triangle-exclamation, .alert-ticker-track i.fa-bolt {
+    color: #e11d48;
+    text-shadow: 0 0 8px rgba(225, 29, 72, 0.5);
+}
+
+.alert-ticker-track i.fa-circle-check {
+    color: #059669;
+}
+
+@keyframes tickerScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* 2. Animated Radial Gauges */
+.stat-card-radial {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    margin-right: 8px;
+}
+
+.radial-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.radial-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.5);
+    stroke-width: 4;
+}
+
+.radial-progress {
+    fill: none;
+    stroke: #0284c7;
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-dasharray: 125; /* 2 * PI * r (r=20) ≈ 125 */
+    stroke-dashoffset: 125;
+    transition: stroke-dashoffset 1.5s cubic-bezier(0.1, 0.8, 0.2, 1);
+}
+
+.radial-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.85rem;
+    color: #0c4a6e;
+    z-index: 2;
+}
+
+/* Specific gauge colors */
+.gauge-total .radial-progress { stroke: #0284c7; filter: drop-shadow(0 0 4px rgba(2, 132, 199, 0.5)); }
+.gauge-active .radial-progress { stroke: #059669; filter: drop-shadow(0 0 4px rgba(5, 150, 105, 0.5)); }
+.gauge-pending .radial-progress { stroke: #d97706; filter: drop-shadow(0 0 4px rgba(217, 119, 6, 0.5)); }
+.gauge-overdue .radial-progress { stroke: #e11d48; filter: drop-shadow(0 0 4px rgba(225, 29, 72, 0.5)); }
+
+.gauge-total .radial-icon { color: #0284c7; }
+.gauge-active .radial-icon { color: #059669; }
+.gauge-pending .radial-icon { color: #d97706; }
+.gauge-overdue .radial-icon { color: #e11d48; }
+
+/* 3. Sparkline Chart Cells */
+.sparkline-cell {
+    width: 120px;
+    padding: 4px 12px !important;
+}
+
+.sparkline-wrap {
+    width: 100px;
+    height: 32px;
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.sparkline-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+/* 4. Action Buttons Fix */
+.btn-action-pop {
+    width: auto !important;
+    height: auto !important;
+    padding: 6px 14px !important;
+    background: linear-gradient(135deg, #0ea5e9, #0284c7) !important;
+    color: white !important;
+    -webkit-text-fill-color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-size: 0.8rem;
+    font-weight: 800;
+    box-shadow: 0 4px 10px rgba(2, 132, 199, 0.3) !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-action-pop:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(2, 132, 199, 0.5) !important;
+}
+
+.btn-action-pop i {
+    font-size: 0.75rem;
+}

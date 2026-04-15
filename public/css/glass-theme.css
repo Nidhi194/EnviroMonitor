@@ -1,0 +1,528 @@
+/* ============================================================== 
+   Nature Glassmorphism Theme Overrides 
+   Provides a clean, environmental, AQI-focused glass UI
+   ============================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800&display=swap');
+
+html, body {
+    /* Nature-inspired background image */
+    background: url('../images/bg.png') center center / cover no-repeat fixed !important;
+    font-family: 'Outfit', 'Manrope', sans-serif !important;
+    color: #064e3b !important; /* Deep forest green */
+}
+
+/* Base override for variables across all root contexts */
+:root, body.page-home, body.page-industry, body.page-agency, .app-layout {
+    --bg-1: transparent !important;
+    --bg-2: transparent !important;
+    --bg-page: transparent !important;
+    --bg-soft: transparent !important;
+    --surface: rgba(255, 255, 255, 0.65) !important;
+    --surface-soft: rgba(255, 255, 255, 0.45) !important;
+    --surface-soft-2: rgba(255, 255, 255, 0.55) !important;
+    --surface-muted: rgba(255, 255, 255, 0.35) !important;
+    
+    --text-strong: #064e3b !important; /* Deep forest green */
+    --text-main: #047857 !important;
+    --text: #064e3b !important;
+    --text-muted: #475569 !important; /* Slate grey for muting */
+    
+    --brand-900: #022c22 !important; /* Ultra dark green */
+    --brand-800: #064e3b !important; /* Deep Green */
+    --brand-700: #0ea5e9 !important; /* Clean sky blue */
+    --brand-600: #0284c7 !important; /* Deeper sky blue */
+    
+    --accent: #10b981 !important; /* Emerald green */
+    --stroke: rgba(255, 255, 255, 0.8) !important;
+    --stroke-strong: rgba(255, 255, 255, 0.9) !important;
+    --line: rgba(255, 255, 255, 0.7) !important;
+    --line-soft: rgba(255, 255, 255, 0.5) !important;
+    
+    --shadow-heavy: 0 12px 36px 0 rgba(2, 44, 34, 0.2) !important;
+    --shadow-soft: 0 4px 16px 0 rgba(2, 44, 34, 0.08) !important;
+    --shadow-md: 0 8px 32px 0 rgba(2, 44, 34, 0.12) !important;
+    
+    --radius-xl: 20px !important;
+    --radius-lg: 14px !important;
+    --radius-md: 10px !important;
+}
+
+/* Glass Panels */
+.main-wrapper, 
+.form-box,
+.sidebar,
+.section-card,
+.page-intro-card,
+.top-navbar,
+.table-wrap,
+.reports-panel,
+.stat-card,
+.main-content,
+.app-layout,
+.left-panel,
+.right-panel,
+.top-header,
+.preview-dialog,
+.reports-shell {
+    background: var(--surface) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    border: 1px solid var(--stroke) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.95) !important;
+    border-left: 1px solid rgba(255, 255, 255, 0.9) !important;
+    box-shadow: 0 8px 32px 0 rgba(2, 44, 34, 0.1) !important;
+    border-radius: var(--radius-xl);
+}
+
+/* Remove border-radius on elements that span full height/width where inappropriate */
+.app-layout, .top-navbar, .sidebar, .main-content, .top-header, .left-panel, .right-panel, .reports-shell {
+    border-radius: 0 !important;
+}
+
+/* Special fix for sidebars / layouts keeping them distinct but glass */
+.sidebar, .top-navbar, .top-header {
+    background: rgba(255, 255, 255, 0.45) !important;
+    backdrop-filter: blur(28px) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.7) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Form Inputs & Selects */
+input, select, textarea, .search-box {
+    background: rgba(230, 235, 240, 0.8) !important; /* Light Grey Tint */
+    border: 1px solid rgba(255,255,255,0.85) !important;
+    backdrop-filter: blur(12px) !important;
+    color: var(--text-strong) !important;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.02) !important;
+    border-radius: 8px !important;
+}
+
+input:focus, select:focus, textarea:focus, .search-box:focus-within {
+    background: rgba(255,255,255,0.9) !important;
+    border-color: var(--brand-700) !important;
+    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.25), inset 0 2px 6px rgba(0,0,0,0.03) !important;
+}
+
+/* Ensure no text is black */
+h1, h2, h3, h4, p, span, li, a, label, td, th, .tagline, .left-panel, .feature-list, div.tagline {
+    color: var(--text-strong) !important;
+}
+
+/* Make headers pop with brand colors (Environment theme) */
+h1, h2 {
+    background: linear-gradient(135deg, var(--brand-800), #0369a1) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    display: inline-block;
+}
+
+.navbar-left, .brand-title {
+    background: linear-gradient(135deg, var(--brand-800), #0369a1) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+/* Primary Button Glow / Vibrant gradient */
+button, .btn, .btn-primary {
+    background: linear-gradient(135deg, var(--brand-700), #0284c7) !important; /* Sky blue to ocean blue */
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 8px 16px rgba(2, 132, 199, 0.25) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    font-weight: 800 !important;
+    position: relative !important;
+    overflow: hidden !important;
+    z-index: 1 !important;
+    transition: all 0.3s ease !important;
+}
+
+button::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important;
+    background: linear-gradient(135deg, #059669, #0284c7) !important; /* Emerald to Ocean */
+    opacity: 0 !important;
+    transition: opacity 0.3s ease !important;
+    z-index: -1 !important;
+}
+
+button:hover::before {
+    opacity: 1 !important;
+}
+
+button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 12px 20px rgba(5, 150, 105, 0.3) !important;
+}
+
+/* Specific soft buttons like logout / secondary */
+.btn-logout, .btn-secondary, .btn-row-action, .logout-btn, .sidebar-link, .nav-item, .icon-button {
+    background: rgba(255, 255, 255, 0.5) !important;
+    color: var(--brand-800) !important;
+    -webkit-text-fill-color: var(--brand-800) !important;
+    border: 1px solid rgba(255, 255, 255, 0.8) !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03) !important;
+}
+
+.btn-secondary:hover, .btn-row-action:hover, .sidebar-link:hover, .nav-item:hover, .icon-button:hover {
+    background: rgba(255, 255, 255, 0.9) !important;
+    color: var(--brand-700) !important;
+    -webkit-text-fill-color: var(--brand-700) !important;
+}
+
+/* Specific Red Logout Hover to override standard glass hover */
+.btn-logout:hover, .logout-btn:hover, #btnLogout:hover {
+    background: #dc2626 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border-color: #dc2626 !important;
+    box-shadow: 0 8px 20px rgba(220, 38, 38, 0.35) !important;
+}
+
+.btn-logout::before, .btn-secondary::before, .btn-row-action::before, .logout-btn::before, .sidebar-link::before, .nav-item::before, .icon-button::before {
+    display: none !important;
+}
+
+/* Active Nav items */
+.nav-item.active, .sidebar-link.is-active {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-color: var(--brand-700) !important;
+    color: var(--brand-700) !important;
+    -webkit-text-fill-color: var(--brand-700) !important;
+    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.15) !important;
+}
+
+/* Tables */
+table th {
+    background: rgba(255,255,255,0.6) !important;
+    backdrop-filter: blur(12px) !important;
+    color: var(--brand-800) !important;
+    -webkit-text-fill-color: var(--brand-800) !important;
+}
+
+table td {
+    background: rgba(255,255,255,0.2) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.4) !important;
+}
+    --bg-1: transparent !important;
+    --bg-2: transparent !important;
+    --bg-page: transparent !important;
+    --bg-soft: transparent !important;
+    --surface: rgba(255, 255, 255, 0.65) !important;
+    --surface-soft: rgba(255, 255, 255, 0.45) !important;
+    --surface-soft-2: rgba(255, 255, 255, 0.55) !important;
+    --surface-muted: rgba(255, 255, 255, 0.35) !important;
+    
+    --text-strong: #064e3b !important; /* Deep forest green */
+    --text-main: #047857 !important;
+    --text: #064e3b !important;
+    --text-muted: #475569 !important; /* Slate grey for muting */
+    
+    --brand-900: #022c22 !important; /* Ultra dark green */
+    --brand-800: #064e3b !important; /* Deep Green */
+    --brand-700: #0ea5e9 !important; /* Clean sky blue */
+    --brand-600: #0284c7 !important; /* Deeper sky blue */
+    
+    --accent: #10b981 !important; /* Emerald green */
+    --stroke: rgba(255, 255, 255, 0.8) !important;
+    --stroke-strong: rgba(255, 255, 255, 0.9) !important;
+    --line: rgba(255, 255, 255, 0.7) !important;
+    --line-soft: rgba(255, 255, 255, 0.5) !important;
+    
+    --shadow-heavy: 0 12px 36px 0 rgba(2, 44, 34, 0.2) !important;
+    --shadow-soft: 0 4px 16px 0 rgba(2, 44, 34, 0.08) !important;
+    --shadow-md: 0 8px 32px 0 rgba(2, 44, 34, 0.12) !important;
+    
+    --radius-xl: 20px !important;
+    --radius-lg: 14px !important;
+    --radius-md: 10px !important;
+}
+
+/* Glass Panels */
+.main-wrapper, 
+.form-box,
+.sidebar,
+.section-card,
+.page-intro-card,
+.top-navbar,
+.table-wrap,
+.reports-panel,
+.stat-card,
+.main-content,
+.app-layout,
+.left-panel,
+.right-panel,
+.top-header,
+.preview-dialog,
+.reports-shell {
+    background: var(--surface) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    border: 1px solid var(--stroke) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.95) !important;
+    border-left: 1px solid rgba(255, 255, 255, 0.9) !important;
+    box-shadow: 0 8px 32px 0 rgba(2, 44, 34, 0.1) !important;
+    border-radius: var(--radius-xl);
+}
+
+/* Remove border-radius on elements that span full height/width where inappropriate */
+.app-layout, .top-navbar, .sidebar, .main-content, .top-header, .left-panel, .right-panel, .reports-shell {
+    border-radius: 0 !important;
+}
+
+/* Special fix for sidebars / layouts keeping them distinct but glass */
+.sidebar, .top-navbar, .top-header {
+    background: rgba(255, 255, 255, 0.45) !important;
+    backdrop-filter: blur(28px) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.7) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Form Inputs & Selects */
+input, select, textarea, .search-box {
+    background: rgba(230, 235, 240, 0.8) !important; /* Light Grey Tint */
+    border: 1px solid rgba(255,255,255,0.85) !important;
+    backdrop-filter: blur(12px) !important;
+    color: var(--text-strong) !important;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.02) !important;
+    border-radius: 8px !important;
+}
+
+input:focus, select:focus, textarea:focus, .search-box:focus-within {
+    background: rgba(255,255,255,0.9) !important;
+    border-color: var(--brand-700) !important;
+    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.25), inset 0 2px 6px rgba(0,0,0,0.03) !important;
+}
+
+/* Ensure no text is black */
+h1, h2, h3, h4, p, span, li, a, label, td, th, .tagline, .left-panel, .feature-list, div.tagline {
+    color: var(--text-strong) !important;
+}
+
+/* Make headers pop with brand colors (Environment theme) */
+h1, h2 {
+    background: linear-gradient(135deg, var(--brand-800), #0369a1) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    display: inline-block;
+}
+
+.navbar-left, .brand-title {
+    background: linear-gradient(135deg, var(--brand-800), #0369a1) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+/* Primary Button Glow / Vibrant gradient */
+button, .btn, .btn-primary {
+    background: linear-gradient(135deg, var(--brand-700), #0284c7) !important; /* Sky blue to ocean blue */
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 8px 16px rgba(2, 132, 199, 0.25) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    font-weight: 800 !important;
+    position: relative !important;
+    overflow: hidden !important;
+    z-index: 1 !important;
+    transition: all 0.3s ease !important;
+}
+
+button::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important;
+    background: linear-gradient(135deg, #059669, #0284c7) !important; /* Emerald to Ocean */
+    opacity: 0 !important;
+    transition: opacity 0.3s ease !important;
+    z-index: -1 !important;
+}
+
+button:hover::before {
+    opacity: 1 !important;
+}
+
+button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 12px 20px rgba(5, 150, 105, 0.3) !important;
+}
+
+/* Specific soft buttons like logout / secondary */
+.btn-logout, .btn-secondary, .btn-row-action, .logout-btn, .sidebar-link, .nav-item, .icon-button {
+    background: rgba(255, 255, 255, 0.5) !important;
+    color: var(--brand-800) !important;
+    -webkit-text-fill-color: var(--brand-800) !important;
+    border: 1px solid rgba(255, 255, 255, 0.8) !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03) !important;
+}
+
+.btn-secondary:hover, .btn-row-action:hover, .sidebar-link:hover, .nav-item:hover, .icon-button:hover {
+    background: rgba(255, 255, 255, 0.9) !important;
+    color: var(--brand-700) !important;
+    -webkit-text-fill-color: var(--brand-700) !important;
+}
+
+/* Specific Red Logout Hover to override standard glass hover */
+.btn-logout:hover, .logout-btn:hover, #btnLogout:hover {
+    background: #dc2626 !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    border-color: #dc2626 !important;
+    box-shadow: 0 8px 20px rgba(220, 38, 38, 0.35) !important;
+}
+
+.btn-logout::before, .btn-secondary::before, .btn-row-action::before, .logout-btn::before, .sidebar-link::before, .nav-item::before, .icon-button::before {
+    display: none !important;
+}
+
+/* Active Nav items */
+.nav-item.active, .sidebar-link.is-active {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-color: var(--brand-700) !important;
+    color: var(--brand-700) !important;
+    -webkit-text-fill-color: var(--brand-700) !important;
+    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.15) !important;
+}
+
+/* Tables */
+table th {
+    background: rgba(255,255,255,0.6) !important;
+    backdrop-filter: blur(12px) !important;
+    color: var(--brand-800) !important;
+    -webkit-text-fill-color: var(--brand-800) !important;
+}
+
+table td {
+    background: rgba(255,255,255,0.2) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.4) !important;
+}
+
+tr:hover td {
+    background: rgba(255,255,255,0.5) !important;
+}
+
+/* Specific elements */
+.status-badge {
+    color: inherit !important;
+    -webkit-text-fill-color: inherit !important;
+    backdrop-filter: blur(6px) !important;
+    border: 1px solid rgba(255,255,255,0.6) !important;
+}
+.status-in-progress { background: rgba(14, 165, 233, 0.2) !important; color: #0284c7 !important; -webkit-text-fill-color: #0284c7 !important; }
+.status-completed { background: rgba(16, 185, 129, 0.2) !important; color: #065f46 !important; -webkit-text-fill-color: #065f46 !important; }
+.status-draft { background: rgba(245, 158, 11, 0.2) !important; color: #d97706 !important; -webkit-text-fill-color: #d97706 !important; }
+
+/* Dashboard left-panel overlay fix if it has it */
+.left-panel {
+    background: rgba(255,255,255,0.15) !important;
+    backdrop-filter: blur(12px) !important;
+}
+.left-panel::after {
+    display: none !important;
+}
+
+/* Custom scrollbar to match theme */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent; 
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.6); 
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.9); 
+}
+
+/* --- Login Screen Fit-to-Screen Fix --- */
+@media (min-width: 992px) {
+    body.page-home {
+        overflow: hidden !important;
+        padding: 4vh 4vw !important;
+    }
+    body.page-home .main-wrapper {
+        min-height: unset !important;
+        height: 92vh !important;
+        max-height: 800px !important;
+        margin: 0 auto;
+        overflow: hidden !important;
+    }
+    body.page-home .left-panel, body.page-home .right-panel {
+        height: 100% !important;
+        overflow-y: auto !important;
+    }
+}
+
+/* --- Calculated Values Highlight (Monitoring Agency) --- */
+body.page-agency table td[id] {
+    background: transparent !important;
+    position: relative;
+    text-align: center;
+    color: #065f46 !important;
+    -webkit-text-fill-color: #065f46 !important;
+    font-weight: 800 !important;
+    z-index: 1;
+}
+
+body.page-agency table td[id]:not(:empty)::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: 8px;
+    right: 8px;
+    background-color: rgba(16, 185, 129, 0.15) !important;
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+    border-radius: 6px !important;
+    z-index: -1;
+}
+
+/* --- Action Menu Bounds & Glass Form --- */
+.action-menu {
+    transform: translateX(-80%) !important;
+    background: rgba(255, 255, 255, 0.75) !important;
+    backdrop-filter: blur(28px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.95) !important;
+    box-shadow: 0 14px 24px rgba(2, 44, 34, 0.15) !important;
+    border-radius: 12px !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    padding: 10px !important;
+}
+.action-menu:not([hidden]) {
+    display: flex !important;
+}
+.action-menu[hidden] {
+    display: none !important;
+}
+.action-menu-item { 
+    color: var(--brand-800) !important; 
+    padding: 10px 12px !important;
+    border-radius: 8px !important;
+}
+.action-menu-item i { color: var(--brand-600) !important; font-size: 1.1rem; }
+.action-menu-item:hover { background: rgba(255, 255, 255, 0.9) !important; }
+.action-menu-item.danger i { color: #be123c !important; }
+
+/* --- Specific Highlight for New Report Button --- */
+#btnNewReport {
+    background: linear-gradient(135deg, #a855f7, #7e22ce) !important;
+    box-shadow: 0 8px 16px rgba(168, 85, 247, 0.35) !important;
+}
+#btnNewReport::before {
+    background: linear-gradient(135deg, #c084fc, #9333ea) !important;
+}
+#btnNewReport:hover {
+    box-shadow: 0 12px 20px rgba(168, 85, 247, 0.45) !important;
+}
