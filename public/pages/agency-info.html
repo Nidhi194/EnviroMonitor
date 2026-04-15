@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agency ProfileInfo</title>
+    <meta name="description" content="Agency profile information collection form for EnviroMonitor onboarding.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://enviromonitor.in/pages/agency-info.html">
+    <link rel="icon" type="image/png" href="../images/logo.png">
+    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="../css/glass-theme.css">
+</head>
+
+<body class="page-industry">
+
+    <header class="top-navbar">
+        <div class="navbar-left" style="display: flex; align-items: center; gap: 14px;">
+            <img src="../images/logo.png" alt="EnviroMonitor Logo" style="height: 54px; width: auto; object-fit: contain;">
+            <span style="font-size: 1.25rem; font-weight: 600; border-left: 2px solid rgba(0,0,0,0.15); padding-left: 14px; margin-left: 4px; display: inline-flex; align-items: center; height: 32px; color: var(--brand-900);">Agency Profile Info</span>
+        </div>
+        <div class="navbar-right">
+            <span class="industry-name" id="agencyNameDisplay" style="color: var(--brand-900);">Agency User</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <p class="sidebar-eyebrow">Navigation</p>
+                <h2 class="sidebar-title">Profile Sections</h2>
+            </div>
+
+            <ul class="nav-list">
+                <li class="nav-item active" onclick="openSection('agencySection', this)">Agency Profile</li>
+            </ul>
+
+            <div class="progress-card">
+                <div class="progress-title">Profile Completeness</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFillAgency"></div>
+                </div>
+                <div class="progress-text" id="progressTextAgency">0%</div>
+                <p class="progress-note">Keep all mandatory details updated to improve onboarding readiness.</p>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <section class="page-intro-card">
+                <p class="intro-eyebrow">Agency Onboarding</p>
+                <h1 class="intro-title">Agency Dashboard Profile Setup</h1>
+                <p class="intro-subtitle">Maintain accurate agency and contact records for monitoring platform access.
+                </p>
+            </section>
+
+            <div class="section-card" id="agencySection">
+                <div class="section-heading">
+                    <h3>Agency Details</h3>
+                    <p class="section-support">Core operational identity details.</p>
+                </div>
+
+                <div class="grid">
+                    <div>
+                        <label for="agency_name">Agency Name <span class="required">*</span></label>
+                        <input id="agency_name" placeholder="e.g. Enviro Care Services">
+                    </div>
+
+                    <div>
+                        <label for="owner_name">Owner Name <span class="required">*</span></label>
+                        <input id="owner_name" placeholder="e.g. Aditi Sharma">
+                    </div>
+
+                    <div>
+                        <label for="email">Email ID <span class="required">*</span></label>
+                        <input id="email" type="email" placeholder="contact@agency.com">
+                    </div>
+
+                    <div>
+                        <label for="phone">Phone Number <span class="required">*</span></label>
+                        <input id="phone" placeholder="+91 XXXXX XXXXX">
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-row">
+                <button class="btn-primary" onclick="saveAgencyProfile()">Save Profile</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script>
+        function updateAgencyProgress() {
+            const fieldIds = ["agency_name", "owner_name", "email", "phone"];
+            let filled = 0;
+            fieldIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && el.value.trim() !== "") {
+                    filled++;
+                }
+            });
+            const percent = Math.round((filled / fieldIds.length) * 100);
+            document.getElementById("progressFillAgency").style.width = percent + "%";
+            document.getElementById("progressTextAgency").innerText = percent + "%";
+        }
+
+        document.querySelectorAll("input").forEach(el => {
+            el.addEventListener("input", updateAgencyProgress);
+            el.addEventListener("change", updateAgencyProgress);
+        });
+    </script>
+</body>
+
+</html>

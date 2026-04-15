@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agency Dashboard — EnviroMonitor</title>
+    <meta name="description" content="Monitor pollution activity, review statistics, check previous actions, and start new AQI report calculations.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://enviromonitor.in/pages/agency-dash.html">
+    <link rel="icon" type="image/png" href="../images/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkR4j8Y7qWfR4+6J0JQ1hYxP2m5x2l3w9A3w==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="../css/agency-dash.css">
+    <link rel="stylesheet" href="../css/glass-theme.css">
+    <link rel="stylesheet" href="../css/agency-features.css">
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://enviromonitor.in" },
+                { "@type": "ListItem", "position": 2, "name": "Agency", "item": "https://enviromonitor.in/pages/agency.html" },
+                { "@type": "ListItem", "position": 3, "name": "Dashboard", "item": "https://enviromonitor.in/pages/agency-dash.html" }
+            ]
+        }
+    </script>
+</head>
+<body>
+    <!-- Full-screen monitoring dashboard layout -->
+    <div class="app-layout" id="appLayout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebarPanel" aria-label="Monitoring Agency Navigation">
+            <div class="sidebar-brand" style="flex-direction: column; align-items: center; gap: 8px; text-align: center; padding-top: 20px;">
+                <div style="background: transparent; box-shadow: none;">
+                    <img src="../images/logo.png" alt="EnviroMonitor Logo" style="height: 70px; width: auto; object-fit: contain;">
+                </div>
+                <div class="brand-copy" style="margin-top: 6px;">
+                    <p class="brand-subtitle" style="font-size: 0.85rem; font-weight: 600; letter-spacing: 0.5px;">AGENCY DASHBOARD</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav" aria-label="Sidebar Menu">
+                <a href="agency-dash.html" class="sidebar-link is-active">
+                    <i class="fa-solid fa-grid-2"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#sectionReportsOverview" class="sidebar-link">
+                    <i class="fa-regular fa-file-lines"></i>
+                    <span>Reports</span>
+                </a>
+                <a href="agency.html" class="sidebar-link">
+                    <i class="fa-solid fa-file-circle-plus"></i>
+                    <span>Generate Report</span>
+                </a>
+                <a href="#sectionSchedules" class="sidebar-link">
+                    <i class="fa-regular fa-calendar-check"></i>
+                    <span>Schedules</span>
+                </a>
+                <a href="agency-info.html" class="sidebar-link">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Update Profile</span>
+                </a>
+                <a href="#sectionAuditLogs" class="sidebar-link">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span>Audit Logs</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-profile">
+                <div class="profile-avatar" aria-hidden="true">MA</div>
+                <div class="profile-content">
+                    <p class="profile-name">Monitoring Agency</p>
+                    <p class="profile-role">Agency User</p>
+                </div>
+                <button id="btnProfileMenu" name="profile_menu" value="profile_menu" class="icon-button" type="button" aria-label="Profile menu">
+                    <i class="fa-solid fa-angle-down"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main content -->
+        <main class="main-panel">
+            <!-- Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button id="btnSidebarToggle" name="sidebar_toggle" value="sidebar_toggle" class="icon-button mobile-only" type="button" aria-label="Toggle sidebar">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <h1>Monitoring Agency Dashboard</h1>
+                </div>
+
+                <div class="header-right">
+                    <a href="agency-info.html" class="nav-text-link" style="font-weight: 600; color: var(--text-main); text-decoration: none; margin-right: 20px;">Update profile</a>
+                    <button id="btnNotifications" name="notifications" value="notifications" class="icon-button" type="button" aria-label="Notifications">
+                        <i class="fa-regular fa-bell"></i>
+                    </button>
+                    <button id="btnLogout" name="logout" value="logout" class="btn btn-logout" type="button" aria-label="Logout">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Logout</span>
+                    </button>
+                    <button id="btnHeaderProfile" name="header_profile" value="header_profile" class="avatar-button" type="button" aria-label="Open profile">
+                        MA
+                    </button>
+                </div>
+            </header>
+
+            <!-- Real-time Alert Ticker -->
+            <div class="alert-ticker" aria-live="polite">
+                <div class="alert-ticker-track" id="alertTickerTrack">
+                    <span><i class="fa-solid fa-triangle-exclamation"></i> [10:42 AM] ALERT: Heavy Metal Industries PM2.5 levels nearing critical threshold.</span>
+                    <span><i class="fa-solid fa-circle-check"></i> [10:15 AM] UPDATE: BioChem Corp weekly emission report verified.</span>
+                    <span><i class="fa-solid fa-bolt"></i> [09:50 AM] ALERT: Global Power Plant SO2 anomalies detected in sector 4.</span>
+                    <!-- Duplicate for infinite scroll loop effect -->
+                    <span aria-hidden="true"><i class="fa-solid fa-triangle-exclamation"></i> [10:42 AM] ALERT: Heavy Metal Industries PM2.5 levels nearing critical threshold.</span>
+                    <span aria-hidden="true"><i class="fa-solid fa-circle-check"></i> [10:15 AM] UPDATE: BioChem Corp weekly emission report verified.</span>
+                    <span aria-hidden="true"><i class="fa-solid fa-bolt"></i> [09:50 AM] ALERT: Global Power Plant SO2 anomalies detected in sector 4.</span>
+                </div>
+            </div>
+
+            <!-- Summary cards -->
+            <section class="stats-grid" aria-label="Summary cards">
+                <article class="stat-card">
+                    <div class="stat-card-radial gauge-total">
+                        <svg class="radial-svg" viewBox="0 0 44 44">
+                            <circle class="radial-bg" cx="22" cy="22" r="20"></circle>
+                            <circle class="radial-progress" cx="22" cy="22" r="20" data-percentage="100"></circle>
+                        </svg>
+                        <div class="radial-icon"><i class="fa-regular fa-file-lines"></i></div>
+                    </div>
+                    <div>
+                        <p class="stat-value" id="statTotalReports">254</p>
+                        <p class="stat-label">Total Reports</p>
+                    </div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-card-radial gauge-active">
+                        <svg class="radial-svg" viewBox="0 0 44 44">
+                            <circle class="radial-bg" cx="22" cy="22" r="20"></circle>
+                            <circle class="radial-progress" cx="22" cy="22" r="20" data-percentage="65"></circle>
+                        </svg>
+                        <div class="radial-icon"><i class="fa-solid fa-chart-line"></i></div>
+                    </div>
+                    <div>
+                        <p class="stat-value" id="statActiveReports">68</p>
+                        <p class="stat-label">Active Reports</p>
+                    </div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-card-radial gauge-pending">
+                        <svg class="radial-svg" viewBox="0 0 44 44">
+                            <circle class="radial-bg" cx="22" cy="22" r="20"></circle>
+                            <circle class="radial-progress" cx="22" cy="22" r="20" data-percentage="25"></circle>
+                        </svg>
+                        <div class="radial-icon"><i class="fa-regular fa-clock"></i></div>
+                    </div>
+                    <div>
+                        <p class="stat-value" id="statPendingReports">12</p>
+                        <p class="stat-label">Pending Reports</p>
+                    </div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-card-radial gauge-overdue">
+                        <svg class="radial-svg" viewBox="0 0 44 44">
+                            <circle class="radial-bg" cx="22" cy="22" r="20"></circle>
+                            <circle class="radial-progress" cx="22" cy="22" r="20" data-percentage="15"></circle>
+                        </svg>
+                        <div class="radial-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    </div>
+                    <div>
+                        <p class="stat-value" id="statOverdueReports">5</p>
+                        <p class="stat-label">Overdue Reports</p>
+                    </div>
+                </article>
+            </section>
+
+            <!-- Reports overview -->
+            <section class="reports-panel" id="sectionReportsOverview" aria-label="Reports overview">
+                <div class="reports-panel-header">
+                    <h2>Reports Overview</h2>
+
+                    <div class="panel-actions">
+                        <!-- Removed Generate Report button per request -->
+                        <button id="btnScheduleReport" name="schedule_report" value="schedule_report" class="btn btn-secondary" type="button">
+                            <i class="fa-regular fa-calendar"></i>
+                            <span>Schedule</span>
+                        </button>
+                        <button id="btnExportCsv" name="export_csv" value="export_csv" class="btn btn-secondary" type="button">
+                            <i class="fa-solid fa-download"></i>
+                            <span>Export CSV</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="reports-toolbar">
+                    <label class="search-box" for="inputSearchReports">
+                        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                        <input id="inputSearchReports" name="search_reports" type="search" placeholder="Search reports..." autocomplete="off">
+                    </label>
+
+                    <button id="btnNewReport" name="new_report" value="new_report" class="btn btn-primary" type="button" style="background: linear-gradient(135deg, #f97316, #ea580c); border: none; box-shadow: 0 4px 14px rgba(249, 115, 22, 0.4); font-weight: 600;">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>New Report</span>
+                    </button>
+                </div>
+
+                <!-- Reports table section. Backend/API can replace placeholder rows below. -->
+                <div class="table-wrapper" id="tableWrapperReports">
+                    <table id="tableReports" class="reports-table">
+                        <thead>
+                            <tr>
+                                <th>Report Name</th>
+                                <th>Type</th>
+                                <th>Generated For</th>
+                                <th>Status</th>
+                                <th>Date Generated</th>
+                                <th>7-Day Trend</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyReports">
+                            <!-- Dynamic report rows will be injected here instantly by JavaScript -->
+                        </tbody>
+                    </table>
+
+                    <div class="table-empty-state" id="tableEmptyState" hidden>
+                        <i class="fa-regular fa-folder-open" aria-hidden="true"></i>
+                        <p>No reports found.</p>
+                        <span>New records from backend will appear here once available.</span>
+                    </div>
+                </div>
+
+                <footer class="table-footer">
+                    <p id="textTableSummary">Showing 2 of 2 reports</p>
+                    <div class="pagination-mock" aria-label="Pagination preview">
+                        <button id="btnPagePrev" name="page_prev" value="page_prev" class="icon-button" type="button" aria-label="Previous page">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <button id="btnPageNext" name="page_next" value="page_next" class="icon-button" type="button" aria-label="Next page">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </footer>
+            </section>
+
+            <!-- Scheduled Checks Management -->
+            <section class="reports-panel" id="sectionSchedules" aria-label="Scheduled Checks" style="margin-top: 24px;">
+                <div class="reports-panel-header">
+                    <h2>Active Dispatched Schedules</h2>
+                </div>
+                <div class="table-wrapper" style="margin-top: 16px;">
+                    <table class="reports-table">
+                        <thead>
+                            <tr>
+                                <th>Target Industry</th>
+                                <th>Schedule Date</th>
+                                <th>Status</th>
+                                <th style="width: 180px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodySchedules">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                    </table>
+                    <div class="table-empty-state" id="tableSchedulesEmptyState" hidden>
+                        <i class="fa-regular fa-calendar-xmark" aria-hidden="true" style="font-size: 1.4rem; color: #8da2be;"></i>
+                        <p style="margin: 10px 0 3px; font-size: 0.95rem; font-weight: 700; color: #5f789a;">No active schedules</p>
+                        <span style="font-size: 0.8rem; color: #7c90ab;">You do not have any pending checks dispatched.</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="reports-panel" id="sectionAuditLogs" aria-label="Audit logs" style="margin-top: 24px;">
+                <div class="reports-panel-header">
+                    <h2>Audit &amp; activity</h2>
+                </div>
+                <p style="margin: 12px 0 0; font-size: 0.9rem; color: #64748b; line-height: 1.5;">
+                    Row actions on reports (view, download, delete) and scheduled checks are recorded in your agency workspace.
+                    For long-term audit exports, use <strong>Export CSV</strong> from the reports overview and retain copies per your retention policy.
+                </p>
+            </section>
+        </main>
+    </div>
+
+    <div id="notificationsPanel" class="dash-dropdown action-menu" role="dialog" aria-label="Notifications" hidden>
+        <div id="notificationsPanelBody" class="dash-dropdown-body" style="max-width: 280px;"></div>
+    </div>
+    <div id="profileDropdownPanel" class="dash-dropdown action-menu" role="menu" aria-label="Account menu" hidden>
+        <a href="agency-info.html" class="action-menu-item" style="text-decoration: none; color: inherit;"><i class="fa-solid fa-gear"></i><span>Update profile</span></a>
+        <button type="button" class="action-menu-item" id="profileMenuLogout"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></button>
+    </div>
+
+    <!-- Shared row action menu. Backend can map actions using selected report id. -->
+    <div id="reportActionMenu" class="action-menu" role="menu" hidden>
+        <button id="btnMenuComplete" name="menu_complete" value="complete" class="action-menu-item" type="button" style="color: #ea580c;"><i class="fa-solid fa-pen-to-square"></i><span>Complete Report</span></button>
+        <button id="btnMenuView" name="menu_view" value="view" class="action-menu-item" type="button"><i class="fa-regular fa-eye"></i><span>View</span></button>
+        <button id="btnMenuDownload" name="menu_download" value="download" class="action-menu-item" type="button"><i class="fa-solid fa-download"></i><span>Download</span></button>
+        <button id="btnMenuDelete" name="menu_delete" value="delete" class="action-menu-item danger" type="button"><i class="fa-regular fa-trash-can"></i><span>Delete</span></button>
+    </div>
+
+    <style>
+        .dash-dropdown { z-index: 1001; }
+        .dash-dropdown-body p { margin: 0 0 10px; font-size: 0.82rem; color: #314f77; line-height: 1.45; }
+        .dash-dropdown-body p:last-child { margin-bottom: 0; }
+        .schedule-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .schedule-modal[hidden] { display: none; }
+        .schedule-modal-content { background: white; width: 400px; border-radius: 12px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .schedule-modal-content h2 { margin-top: 0; margin-bottom: 20px; font-size: 20px; font-weight: 600; }
+        .schedule-modal-close { float: right; background: none; border: none; font-size: 24px; cursor: pointer; color: #64748b; }
+    </style>
+
+    <div id="scheduleModal" class="schedule-modal" hidden>
+        <div class="schedule-modal-content">
+            <button type="button" class="schedule-modal-close" id="btnCloseScheduleModal">&times;</button>
+            <h2>Schedule Ambient Check</h2>
+            <form id="formScheduleCheck" style="display: flex; flex-direction: column; gap: 15px;">
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <label for="selectIndustry" style="font-size: 14px; font-weight: 500;">Select Industry <span style="color:red">*</span></label>
+                    <select id="selectIndustry" required style="padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 14px;">
+                        <option value="">Loading industries...</option>
+                    </select>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <label for="checkDate" style="font-size: 14px; font-weight: 500;">Check Date <span style="color:red">*</span></label>
+                    <input type="date" id="checkDate" required min="" style="padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 14px;">
+                </div>
+                <button type="submit" class="btn-primary" style="margin-top: 10px; padding: 12px; border-radius: 6px; background: #0f172a; color: white; font-weight: 500; border: none; cursor: pointer;">Confirm Schedule</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../js/agency-dash.js?v=custom2"></script>
+    <script src="../js/agency-features.js?v=custom2"></script>
+</body>
+</html>

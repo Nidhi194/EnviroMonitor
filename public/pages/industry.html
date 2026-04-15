@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industry Registration — Submit Facility Details | EnviroMonitor</title>
+    <meta name="description" content="Submit your industry and facility information to begin pollution data tracking and compliance monitoring on EnviroMonitor.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://enviromonitor.in/pages/industry.html">
+    <link rel="icon" type="image/png" href="../images/logo.png">
+    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="../css/glass-theme.css">
+</head>
+<body class="page-industry">
+
+<header class="top-navbar">
+        <div class="navbar-left" style="display: flex; align-items: center; gap: 14px;">
+            <img src="../images/logo.png" alt="EnviroMonitor Logo" style="height: 54px; width: auto; object-fit: contain;">
+            <span style="font-size: 1.25rem; font-weight: 600; border-left: 2px solid rgba(0,0,0,0.15); padding-left: 14px; margin-left: 4px; display: inline-flex; align-items: center; height: 32px; color: var(--brand-900);">Industry Profile</span>
+        </div>
+        <div class="navbar-right">
+            <span class="industry-name" id="industryNameDisplay" style="color: var(--brand-900);">Industry User</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+</header>
+
+<div class="dashboard-layout">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <p class="sidebar-eyebrow">Navigation</p>
+            <h2 class="sidebar-title">Profile Sections</h2>
+        </div>
+
+        <ul class="nav-list">
+            <li class="nav-item active" onclick="openSection('industrySection', this)">Industry Profile</li>
+            <li class="nav-item" onclick="openSection('contactSection', this)">Contact Information</li>
+            <li class="nav-item" onclick="openSection('complianceSection', this)">Compliance &amp; Notifications</li>
+        </ul>
+
+        <div class="progress-card">
+            <div class="progress-title">Profile Completeness</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">0%</div>
+            <p class="progress-note">Keep all mandatory details updated to improve onboarding readiness.</p>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <section class="page-intro-card">
+            <p class="intro-eyebrow">Industry Onboarding</p>
+            <h1 class="intro-title">Industry Dashboard Profile Setup</h1>
+            <p class="intro-subtitle">Maintain accurate plant and contact records for AQI reporting, compliance workflows, and formal review readiness.</p>
+        </section>
+
+        <div class="section-card" id="industrySection">
+            <div class="section-heading">
+                <h3>Industry Details</h3>
+                <p class="section-support">Core operational identity and registered location details.</p>
+            </div>
+
+            <div class="grid">
+                <div>
+                    <label for="industry_name">Industry Name <span class="required">*</span></label>
+                    <input id="industry_name" placeholder="e.g. Green Steel Pvt Ltd">
+                </div>
+
+                <div>
+                    <label for="industry_type">Industry Type <span class="required">*</span></label>
+                    <select id="industry_type">
+                        <option value="">-- Select Type --</option>
+                        <option>Manufacturing</option>
+                        <option>Chemical</option>
+                        <option>Cement & Construction</option>
+                        <option>Steel & Metallurgy</option>
+                        <option>Textile</option>
+                        <option>Paper & Pulp</option>
+                        <option>Pharmaceutical</option>
+                        <option>Power Generation</option>
+                        <option>Others</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="industry_id">Industry ID / Registration Number <span class="required">*</span></label>
+                    <input id="industry_id" placeholder="e.g. MH-IND-2024-00123">
+                </div>
+
+                <div class="full-width">
+                    <label for="address">Location / Address <span class="required">*</span></label>
+                    <textarea id="address" placeholder="Full address including city, state and PIN"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card" id="contactSection">
+            <div class="section-heading">
+                <h3>Contact Information</h3>
+                <p class="section-support">Primary communication contacts for regulatory and operational coordination.</p>
+            </div>
+
+            <div class="grid">
+                <div>
+                    <label for="contact_name">Contact Person Name <span class="required">*</span></label>
+                    <input id="contact_name" placeholder="e.g. Rahul Sharma">
+                </div>
+
+                <div>
+                    <label for="role_designation">Role / Designation <span class="required">*</span></label>
+                    <input id="role_designation" placeholder="e.g. Plant Manager">
+                </div>
+
+                <div>
+                    <label for="email">Email ID <span class="required">*</span></label>
+                    <input id="email" type="email" placeholder="contact@company.com">
+                </div>
+
+                <div>
+                    <label for="phone">Primary Phone Number <span class="required">*</span></label>
+                    <input id="phone" placeholder="+91 XXXXX XXXXX">
+                </div>
+
+                <div>
+                    <label for="alt_phone">Alternate Phone Number</label>
+                    <input id="alt_phone" placeholder="+91 XXXXX XXXXX">
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card" id="complianceSection">
+            <div class="section-heading">
+                <h3>Compliance &amp; Notifications</h3>
+                <p class="section-support">Monitoring cadence and alert preferences for timely response.</p>
+            </div>
+
+            <div class="grid">
+                <div>
+                    <label for="monitoring_frequency">AQI Monitoring Frequency <span class="required">*</span></label>
+                    <select id="monitoring_frequency">
+                        <option value="">-- Select Frequency --</option>
+                        <option>Daily</option>
+                        <option>Weekly</option>
+                        <option>Monthly</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="notification_pref">Notification Preference <span class="required">*</span></label>
+                    <select id="notification_pref">
+                        <option value="">-- Select Preference --</option>
+                        <option>Email</option>
+                        <option>SMS</option>
+                        <option>Email & SMS</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-row">
+            <button class="btn-primary" onclick="saveData()">Save Profile</button>
+            <button class="btn-secondary" type="button" id="btnSubmitForReview" onclick="submitForReview()">Submit for Review</button>
+        </div>
+    </main>
+</div>
+
+<script src="../js/app.js"></script>
+</body>
+</html>

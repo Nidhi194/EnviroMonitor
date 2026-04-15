@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agency Report Generation & Analysis | EnviroMonitor</title>
+    <meta name="description" content="Generate and analyze AQI reports, calculate pollutant metrics, and manage monitoring workflows for industries.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://enviromonitor.in/pages/agency.html">
+    <link rel="icon" type="image/png" href="../images/logo.png">
+    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="../css/glass-theme.css">
+</head>
+<body class="page-agency">
+
+    <header class="top-navbar">
+        <div class="navbar-left" style="display: flex; align-items: center; gap: 14px;">
+            <img src="../images/logo.png" alt="EnviroMonitor Logo" style="height: 54px; width: auto; object-fit: contain;">
+            <span style="font-size: 1.25rem; font-weight: 600; border-left: 2px solid rgba(0,0,0,0.15); padding-left: 14px; margin-left: 4px; display: inline-flex; align-items: center; height: 32px; color: var(--brand-900);">Agency Report Builder</span>
+        </div>
+        <div class="navbar-right">
+            <div class="agency-badge" style="color: var(--brand-900);">Agency Panel</div>
+            <a href="agency-dash.html" style="color: var(--brand-900); margin-right: 15px; text-decoration: none; font-weight: 600;">Dashboard</a>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+        <main class="main-content">
+            <section class="section-card" id="section-industry">
+                <h3>Industry Selection</h3>
+
+                <div class="step-nav-wrap" aria-label="Dashboard Steps">
+                    <div class="step-nav-header">
+                        <div class="step-nav-title">Monitoring Workflow</div>
+                        <div class="step-nav-subtitle">Select a step to jump to the same existing section.</div>
+                    </div>
+
+                    <ul class="nav-list" id="agencyNav">
+                        <li class="nav-item active" onclick="openSection('section-industry', this)">
+                            <div class="nav-number">1</div>
+                            <div class="nav-text">Industry Selection</div>
+                        </li>
+                        <li class="nav-item" onclick="openSection('section-pm10', this)">
+                            <div class="nav-number">2</div>
+                            <div class="nav-text">PM10 Determination</div>
+                        </li>
+                        <li class="nav-item" onclick="openSection('section-so2', this)">
+                            <div class="nav-number">3</div>
+                            <div class="nav-text">SO₂ Determination</div>
+                        </li>
+                        <li class="nav-item" onclick="openSection('section-no2', this)">
+                            <div class="nav-number">4</div>
+                            <div class="nav-text">NO₂ Determination</div>
+                        </li>
+                        <li class="nav-item" onclick="openSection('section-pm25', this)">
+                            <div class="nav-number">5</div>
+                            <div class="nav-text">PM2.5 Determination</div>
+                        </li>
+                        <li class="nav-item" onclick="openSection('section-report', this)">
+                            <div class="nav-number">6</div>
+                            <div class="nav-text">Generate Report</div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="top-fields">
+                    <div class="field-box">
+                        <label for="industry_name">Industry Name</label>
+                        <select id="industry_name">
+                            <option value="">Select Industry</option>
+                        </select>
+                    </div>
+
+                    <div class="field-box">
+                        <label for="location">Location</label>
+                        <input id="location" placeholder="Enter Location">
+                    </div>
+
+                    <div class="field-box">
+                        <label for="date">Monitoring Date</label>
+                        <input type="date" id="date">
+                    </div>
+                </div>
+            </section>
+
+            <section class="section-card" id="section-pm10">
+                <h3>PM10 Determination</h3>
+
+                <div class="table-wrap">
+                    <table border="1" cellpadding="5">
+                        <tr>
+                            <th>Sr No</th>
+                            <th>Parameter</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                        </tr>
+
+                        <tr>
+                            <td>1</td>
+                            <td>Time of Sampling(in hours)</td>
+                            <td>
+                                <div class="time-range-group">
+                                    <div class="sampling-time-inline">
+                                        <input id="pm_time_from_1" type="time" step="60" aria-label="From Time 1">
+                                        <span class="sampling-time-label">From</span>
+                                        <input id="pm_time_to_1" type="time" step="60" aria-label="To Time 1">
+                                    </div>
+                                    <input id="pm_time_1" type="hidden">
+                                    <div class="time-validation" id="pm_time_error_1"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="time-range-group">
+                                    <div class="sampling-time-inline">
+                                        <input id="pm_time_from_2" type="time" step="60" aria-label="From Time 2">
+                                        <span class="sampling-time-label">From</span>
+                                        <input id="pm_time_to_2" type="time" step="60" aria-label="To Time 2">
+                                    </div>
+                                    <input id="pm_time_2" type="hidden">
+                                    <div class="time-validation" id="pm_time_error_2"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="time-range-group">
+                                    <div class="sampling-time-inline">
+                                        <input id="pm_time_from_3" type="time" step="60" aria-label="From Time 3">
+                                        <span class="sampling-time-label">From</span>
+                                        <input id="pm_time_to_3" type="time" step="60" aria-label="To Time 3">
+                                    </div>
+                                    <input id="pm_time_3" type="hidden">
+                                    <div class="time-validation" id="pm_time_error_3"></div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>2</td>
+                            <td>Location Name</td>
+                            <td colspan="3" class="location-merged-cell">
+                                <input id="pm_loc_1" class="location-sync-input" readonly>
+                                <input id="pm_loc_2" type="hidden">
+                                <input id="pm_loc_3" type="hidden">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>3</td>
+                            <td>Duration (T in minutes)</td>
+                            <td>480</td>
+                            <td>480</td>
+                            <td>480</td>
+                        </tr>
+
+                        <tr>
+                            <td>4</td>
+                            <td>Initial Flow Rate (Q1)</td>
+                            <td><input id="q1_1" type="number" step="any"></td>
+                            <td><input id="q1_2" type="number" step="any"></td>
+                            <td><input id="q1_3" type="number" step="any"></td>
+                        </tr>
+
+                        <tr>
+                            <td>5</td>
+                            <td>Final Flow Rate (Q2)</td>
+                            <td><input id="q2_1" type="number" step="any"></td>
+                            <td><input id="q2_2" type="number" step="any"></td>
+                            <td><input id="q2_3" type="number" step="any"></td>
+                        </tr>
+
+                        <tr>
+                            <td>6</td>
+                            <td>Average Flow Rate (Q1 + Q2) / 2</td>
+                            <td id="avg1"></td>
+                            <td id="avg2"></td>
+                            <td id="avg3"></td>
+                        </tr>
+
+                        <tr>
+                            <td>7</td>
+                            <td>Volume of Air Sample in m^3 (V = Avg × T)</td>
+                            <td id="v1"></td>
+                            <td id="v2"></td>
+                            <td id="v3"></td>
+                        </tr>
+
+                        <tr>
+                            <td>8</td>
+                            <td>Filter Paper Number / ID</td>
+                            <td><input id="fp_1"></td>
+                            <td><input id="fp_2"></td>
+                            <td><input id="fp_3"></td>
+                        </tr>
+
+                        <tr>
+                            <td>9</td>
+                            <td>Weight of Filter Paper + Dust, W2 (g)</td>
+                            <td><input id="w2_1" type="number" step="any"></td>
+                            <td><input id="w2_2" type="number" step="any"></td>
+                            <td><input id="w2_3" type="number" step="any"></td>
+                        </tr>
+
+                        <tr>
+                            <td>10</td>
+                            <td>Weight of Filter Paper, W1 (g)</td>
+                            <td><input id="w1_1" type="number" step="any"></td>
+                            <td><input id="w1_2" type="number" step="any"></td>
+                            <td><input id="w1_3" type="number" step="any"></td>
+                        </tr>
+
+                        <tr>
+                            <td>11</td>
+                            <td>Weight of Dust (W2 - W1) (g)</td>
+                            <td id="dust1"></td>
+                            <td id="dust2"></td>
+                            <td id="dust3"></td>
+                        </tr>
+
+                        <tr>
+                            <td>12</td>
+                            <td>Particulate matter PM10 (µg/m³) = ((W2 - W1) / V) × 10⁶</td>
+                            <td id="pm1"></td>
+                            <td id="pm2"></td>
+                            <td id="pm3"></td>
+                        </tr>
+
+                        <tr>
+                            <td>13</td>
+                            <td>Average Concentration of PM10 (µg/m³)</td>
+                            <td colspan="3" id="avgPM"></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="btn-row">
+                    <button onclick="calculatePM10()">Calculate PM10</button>
+                    <button onclick="savePM10()">Save PM10</button>
+                </div>
+            </section>
+
+            <section class="section-card" id="section-so2">
+                <h3>Determination of Sulfur Dioxide (SO₂)</h3>
+
+                <div class="table-wrap">
+                    <table border="1" cellpadding="5">
+                        <tr>
+                            <th>Sr No</th>
+                            <th>Parameter</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>4</th>
+                            <th>5</th>
+                            <th>6</th>
+                        </tr>
+
+                        <tr>
+                            <td>1</td>
+                            <td>Time of Sampling</td>
+                            <td>
+                                <div class="time-range-group">
+                                    <div class="sampling-time-inline">
+                                    <input id="so_time_start_1" type="time" step="60" aria-label="SO2 Time Start 1">
+                                    <span class="sampling-time-label">From</span>
+                                    <input id="so_time_end_1" type="time" step="60" aria-label="SO2 Time End 1">
+                                    </div>
+                                    <input id="so_time_1" type="hidden">
+                                    <div class="time-validation" id="so_time_error_1"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="time-range-group">
+                                    <div class="sampling-time-inline">
+                                        <input id="so_time_start_2" type="time" step="60" aria-label="SO2 Time Start 2">
+                                        <span class="sampling-time-label">From</span>
+                                        <input id="so_time_end_2" type="time" step="60" aria-label="SO2 Time End 2">
+                                    </div>
+                                    <input id="so_time_2" type="hidden">
+                                    <div class="time-validation" id="so_time_error_2"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="time-range-group">
+                                    <div class="sampling-time-inline">
+                                        <input id="so_time_start_3" type="time" step="60" aria-label="SO2 Time Start 3">
+                                        <span class="sampling-time-label">From</span>
+                                        <input id="so_time_end_3" type="time" step="60" aria-label="SO2 Time End 3">
+                                    </div>
+                                    <input id="so_time_3" type="hidden">
+                                    <div class="time-validation" id="so_time_error_3"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="time-range-group">
+                                    <div class="sampling-time-inline">
+                                        <input id="so_time_start_4" type="time" step="60" aria-label="SO2 Time Start 4">
+                                        <span class="sampling-time-label">From</span>
+                                        <input id="so_time_end_4" type="time" step="60" aria-label="SO2 Time End 4">
+                                    </div>
+                                    <input id="so_time_4" type="hidden">
+                                    <div class="time-validation" id="so_time_error_4"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="time-range-group">
+                                    <div class="sampling-time-inline">
+                                        <input id="so_time_start_5" type="time" step="60" aria-label="SO2 Time Start 5">
+                                        <span class="sampling-time-label">From</span>
+                                        <input id="so_time_end_5" type="time" step="60" aria-label="SO2 Time End 5">
+                                    </div>
+                                    <input id="so_time_5" type="hidden">
+                                    <div class="time-validation" id="so_time_error_5"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="time-range-group">
+                                    <div class="sampling-time-inline">
+                                        <input id="so_time_start_6" type="time" step="60" aria-label="SO2 Time Start 6">
+                                        <span class="sampling-time-label">From</span>
+                                        <input id="so_time_end_6" type="time" step="60" aria-label="SO2 Time End 6">
+                                    </div>
+                                    <input id="so_time_6" type="hidden">
+                                    <div class="time-validation" id="so_time_error_6"></div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>2</td>
+                            <td>Location Name</td>
+                            <td colspan="6" class="location-merged-cell">
+                                <input id="so_loc_1" class="location-sync-input" readonly>
+                                <input id="so_loc_2" type="hidden">
+                                <input id="so_loc_3" type="hidden">
+                                <input id="so_loc_4" type="hidden">
+                                <input id="so_loc_5" type="hidden">
+                                <input id="so_loc_6" type="hidden">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>3</td>
+                            <td>Duration of Sampling (hours)</td>
+                            <td><input id="t1" type="number" step="any"></td>
+                            <td><input id="t2" type="number" step="any"></td>
+                            <td><input id="t3" type="number" step="any"></td>
+                            <td><input id="t4" type="number" step="any"></td>
+                            <td><input id="t5" type="number" step="any"></td>
+                            <td><input id="t6" type="number" step="any"></td>
+                        </tr>
+
+                        <tr>
+                            <td>4</td>
+                            <td>Sample Absorbance (ES)</td>
+                            <td><input id="es1" type="number" step="any"></td>
+                            <td><input id="es2" type="number" step="any"></td>
+                            <td><input id="es3" type="number" step="any"></td>
+                            <td><input id="es4" type="number" step="any"></td>
+                            <td><input id="es5" type="number" step="any"></td>
+                            <td><input id="es6" type="number" step="any"></td>
+                        </tr>
+
+                        <tr>
+                            <td>5</td>
+                            <td>Calibration Factor (CF)</td>
+                            <td><input id="cf1" type="number" step="any"></td>
+                            <td><input id="cf2" type="number" step="any"></td>
+                            <td><input id="cf3" type="number" step="any"></td>
+                            <td><input id="cf4" type="number" step="any"></td>
+                            <td><input id="cf5" type="number" step="any"></td>
+                            <td><input id="cf6" type="number" step="any"></td>
+                        </tr>
+
+                        <tr>
+                            <td>6</td>
+                            <td>µg SO₂ / 10 ml (A = ES × CF)</td>
+                            <td id="a1"></td>
+                            <td id="a2"></td>
+                            <td id="a3"></td>
+                            <td id="a4"></td>
+                            <td id="a5"></td>
+                            <td id="a6"></td>
+                        </tr>
+
+                        <tr>
+                            <td>7</td>
+                            <td>Flow Rate Q (LPM)</td>
+                            <td><input id="qso1" type="number" step="any"></td>
+                            <td><input id="qso2" type="number" step="any"></td>
+                            <td><input id="qso3" type="number" step="any"></td>
+                            <td><input id="qso4" type="number" step="any"></td>
+                            <td><input id="qso5" type="number" step="any"></td>
+                            <td><input id="qso6" type="number" step="any"></td>
+                        </tr>
+
+                        <tr>
+                            <td>8</td>
+                            <td>Volume of Sample in Liters (VA)</td>
+                            <td id="va1"></td>
+                            <td id="va2"></td>
+                            <td id="va3"></td>
+                            <td id="va4"></td>
+                            <td id="va5"></td>
+                            <td id="va6"></td>
+                        </tr>
+
+                        <tr>
+                            <td>9</td>
+                            <td>Volume of Sample in ml (VS)</td>
+                            <td><input id="vs1" type="number" step="any"></td>
+                            <td><input id="vs2" type="number" step="any"></td>
+                            <td><input id="vs3" type="number" step="any"></td>
+                            <td><input id="vs4" type="number" step="any"></td>
+                            <td><input id="vs5" type="number" step="any"></td>
+                            <td><input id="vs6" type="number" step="any"></td>
+                        </tr>
+
+                        <tr>
+                            <td>10</td>
+                            <td>Volume Taken for Analysis (VT) ml</td>
+                            <td><input id="vt1" type="number" step="any"></td>
+                            <td><input id="vt2" type="number" step="any"></td>
+                            <td><input id="vt3" type="number" step="any"></td>
+                            <td><input id="vt4" type="number" step="any"></td>
+                            <td><input id="vt5" type="number" step="any"></td>
+                            <td><input id="vt6" type="number" step="any"></td>
+                        </tr>
+
+                        <tr>
+                            <td>11</td>
+                            <td>Concentration of SO₂ (µg/m³) = (A × VS × 1000) / (VA × VT)</td>
+                            <td id="so1"></td>
+                            <td id="so2"></td>
+                            <td id="so3"></td>
+                            <td id="so4"></td>
+                            <td id="so5"></td>
+                            <td id="so6"></td>
+                        </tr>
+
+                        <tr>
+                            <td>12</td>
+                            <td>Average Concentration of SO₂ (µg/m³)</td>
+                            <td colspan="6" id="avgSO2"></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="btn-row">
+                    <button onclick="calculateSO2()">Calculate SO₂</button>
+                    <button onclick="saveSO2()">Save SO₂</button>
+                </div>
+            </section>
+
+            <section class="section-card" id="section-no2">
+                <h3>Determination of Nitrogen Dioxide (NO₂)</h3>
+
+                <div class="table-wrap">
+                    <table border="1" cellpadding="5">
+                        <tr>
+                            <th>Sr No</th>
+                            <th>Parameter</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>4</th>
+                            <th>5</th>
+                            <th>6</th>
+                        </tr>
+
+                        <tr>
+                            <td>1</td>
+                            <td>Time of Sampling</td>
+                            <td>
+                                <div class="time-range-group">
+                                    <div class="sampling-time-inline">
+                                    <input id="no_time_start_1" type="time" step="60" aria-label="NO2 Time Start 1">
+                                    <span class="sampling-time-label">From</span>
+                                    <input id="no_time_end_1" type="time" step="60" aria-label="NO2 Time End 1">
+                                    </div>
+                                    <input id="no_time_1" type="hidden">
+                                    <div class="time-validation" id="no_time_error_1"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="time-range-group">
+                                    <div class="sampling-time-inline">
+                                        <input id="no_time_start_2" type="time" step="60" aria-label="NO2 Time Start 2">
+                                        <span class="sampling-time-label">From</span>
+                                        <input id="no_time_end_2" type="time" step="60" aria-label="NO2 Time End 2">
+                                    </div>
+                                    <input id="no_time_2" type="hidden">
+                                    <div class="time-validation" id="no_time_error_2"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="time-range-group">
+                                    <div class="sampling-time-inline">
+                                        <input id="no_time_start_3" type="time" step="60" aria-label="NO2 Time Start 3">
+                                        <span class="sampling-time-label">From</span>
+                                        <input id="no_time_end_3" type="time" step="60" aria-label="NO2 Time End 3">
+                                    </div>
+                                    <input id="no_time_3" type="hidden">
+                                    <div class="time-validation" id="no_time_error_3"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="time-range-group">
+                                    <div class="sampling-time-inline">
+                                        <input id="no_time_start_4" type="time" step="60" aria-label="NO2 Time Start 4">
+                                        <span class="sampling-time-label">From</span>
+                                        <input id="no_time_end_4" type="time" step="60" aria-label="NO2 Time End 4">
+                                    </div>
+                                    <input id="no_time_4" type="hidden">
+                                    <div class="time-validation" id="no_time_error_4"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="time-range-group">
+                                    <div class="sampling-time-inline">
+                                        <input id="no_time_start_5" type="time" step="60" aria-label="NO2 Time Start 5">
+                                        <span class="sampling-time-label">From</span>
+                                        <input id="no_time_end_5" type="time" step="60" aria-label="NO2 Time End 5">
+                                    </div>
+                                    <input id="no_time_5" type="hidden">
+                                    <div class="time-validation" id="no_time_error_5"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="time-range-group">
+                                    <div class="sampling-time-inline">
+                                        <input id="no_time_start_6" type="time" step="60" aria-label="NO2 Time Start 6">
+                                        <span class="sampling-time-label">From</span>
+                                        <input id="no_time_end_6" type="time" step="60" aria-label="NO2 Time End 6">
+                                    </div>
+                                    <input id="no_time_6" type="hidden">
+                                    <div class="time-validation" id="no_time_error_6"></div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>2</td>
+                            <td>Location Name</td>
+                            <td colspan="6" class="location-merged-cell">
+                                <input id="no_loc_1" class="location-sync-input" readonly>
+                                <input id="no_loc_2" type="hidden">
+                                <input id="no_loc_3" type="hidden">
+                                <input id="no_loc_4" type="hidden">
+                                <input id="no_loc_5" type="hidden">
+                                <input id="no_loc_6" type="hidden">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>3</td>
+                            <td>Duration of Sampling (hours)</td>
+                            <td><input id="not1" type="number" step="any"></td>
+                            <td><input id="not2" type="number" step="any"></td>
+                            <td><input id="not3" type="number" step="any"></td>
+                            <td><input id="not4" type="number" step="any"></td>
+                            <td><input id="not5" type="number" step="any"></td>
+                            <td><input id="not6" type="number" step="any"></td>
+                        </tr>
+
+                        <tr>
+                            <td>4</td>
+                            <td>Sample Absorbance (AS)</td>
+                            <td><input id="as1" type="number" step="any"></td>
+                            <td><input id="as2" type="number" step="any"></td>
+                            <td><input id="as3" type="number" step="any"></td>
+                            <td><input id="as4" type="number" step="any"></td>
+                            <td><input id="as5" type="number" step="any"></td>
+                            <td><input id="as6" type="number" step="any"></td>
+                        </tr>
+
+                        <tr>
+                            <td>5</td>
+                            <td>Calibration Factor (CF)</td>
+                            <td><input id="ncf1" type="number" step="any"></td>
+                            <td><input id="ncf2" type="number" step="any"></td>
+                            <td><input id="ncf3" type="number" step="any"></td>
+                            <td><input id="ncf4" type="number" step="any"></td>
+                            <td><input id="ncf5" type="number" step="any"></td>
+                            <td><input id="ncf6" type="number" step="any"></td>
+                        </tr>
+
+                        <tr>
+                            <td>6</td>
+                            <td>µg NO₂ / 10 ml (X = AS × CF)</td>
+                            <td id="x1"></td>
+                            <td id="x2"></td>
+                            <td id="x3"></td>
+                            <td id="x4"></td>
+                            <td id="x5"></td>
+                            <td id="x6"></td>
+                        </tr>
+
+                        <tr>
+                            <td>7</td>
+                            <td>Flow Rate Q (LPM)</td>
+                            <td><input id="nq1" type="number" step="any"></td>
+                            <td><input id="nq2" type="number" step="any"></td>
+                            <td><input id="nq3" type="number" step="any"></td>
+                            <td><input id="nq4" type="number" step="any"></td>
+                            <td><input id="nq5" type="number" step="any"></td>
+                            <td><input id="nq6" type="number" step="any"></td>
+                        </tr>
+
+                        <tr>
+                            <td>8</td>
+                            <td>Volume of Sample in Liters (Va)</td>
+                            <td id="nva1"></td>
+                            <td id="nva2"></td>
+                            <td id="nva3"></td>
+                            <td id="nva4"></td>
+                            <td id="nva5"></td>
+                            <td id="nva6"></td>
+                        </tr>
+
+                        <tr>
+                            <td>9</td>
+                            <td>Volume of Sample in ml (Vs)</td>
+                            <td><input id="nvs1" type="number" step="any"></td>
+                            <td><input id="nvs2" type="number" step="any"></td>
+                            <td><input id="nvs3" type="number" step="any"></td>
+                            <td><input id="nvs4" type="number" step="any"></td>
+                            <td><input id="nvs5" type="number" step="any"></td>
+                            <td><input id="nvs6" type="number" step="any"></td>
+                        </tr>
+
+                        <tr>
+                            <td>10</td>
+                            <td>Volume of Aliquot Taken for Analysis (Vt) ml</td>
+                            <td><input id="nvt1" type="number" step="any"></td>
+                            <td><input id="nvt2" type="number" step="any"></td>
+                            <td><input id="nvt3" type="number" step="any"></td>
+                            <td><input id="nvt4" type="number" step="any"></td>
+                            <td><input id="nvt5" type="number" step="any"></td>
+                            <td><input id="nvt6" type="number" step="any"></td>
+                        </tr>
+
+                        <tr>
+                            <td>11</td>
+                            <td>Sample Efficiency</td>
+                            <td>0.82</td>
+                            <td>0.82</td>
+                            <td>0.82</td>
+                            <td>0.82</td>
+                            <td>0.82</td>
+                            <td>0.82</td>
+                        </tr>
+
+                        <tr>
+                            <td>12</td>
+                            <td>Concentration of NO₂ (µg/m³) = (X × Vs × 1000) / (Va × Vt × 0.82)</td>
+                            <td id="no1"></td>
+                            <td id="no2"></td>
+                            <td id="no3"></td>
+                            <td id="no4"></td>
+                            <td id="no5"></td>
+                            <td id="no6"></td>
+                        </tr>
+
+                        <tr>
+                            <td>13</td>
+                            <td>Average Concentration of NO₂ (µg/m³)</td>
+                            <td colspan="6" id="avgNO2"></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="btn-row">
+                    <button onclick="calculateNO2()">Calculate NO₂</button>
+                    <button onclick="saveNO2()">Save NO₂</button>
+                </div>
+            </section>
+
+            <section class="section-card" id="section-pm25">
+                <h3>Determination of Particulate Matter PM2.5</h3>
+
+                <div class="table-wrap">
+                    <table border="1" cellpadding="5">
+                        <tr>
+                            <th>Serial Number</th>
+                            <th>Parameters</th>
+                            <th>1</th>
+                        </tr>
+
+                        <tr>
+                            <td>1</td>
+                            <td>Time of Sampling</td>
+                            <td>
+                                <div class="time-range-group">
+                                    <div class="sampling-time-inline">
+                                        <input id="pm25_time_start_1" type="time" step="60" aria-label="PM2.5 Time Start 1">
+                                        <span class="sampling-time-label">From</span>
+                                        <input id="pm25_time_end_1" type="time" step="60" aria-label="PM2.5 Time End 1">
+                                    </div>
+                                    <input id="pm25_time_1" type="hidden">
+                                    <div class="time-validation" id="pm25_time_error_1"></div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>2</td>
+                            <td>Location Name</td>
+                            <td><input id="pm25_loc_1" class="location-sync-input" readonly></td>
+                        </tr>
+
+                        <tr>
+                            <td>3</td>
+                            <td>Duration of Sampling in Hours</td>
+                            <td>24</td>
+                        </tr>
+
+                        <tr>
+                            <td>4</td>
+                            <td>Time in Minutes</td>
+                            <td>1440</td>
+                        </tr>
+
+                        <tr>
+                            <td>5</td>
+                            <td>Initial Flow Rate Q1</td>
+                            <td><input id="pm25_q1_1" type="number" step="any"></td>
+                        </tr>
+
+                        <tr>
+                            <td>6</td>
+                            <td>Final Flow Rate Q2</td>
+                            <td><input id="pm25_q2_1" type="number" step="any"></td>
+                        </tr>
+
+                        <tr>
+                            <td>7</td>
+                            <td>Average Flow Rate (Q1 + Q2) / 2</td>
+                            <td id="pm25_avg1"></td>
+                        </tr>
+
+                        <tr>
+                            <td>8</td>
+                            <td>Volume of Air Sample in meter cube V = ((Q1 + Q2) / 2) × T</td>
+                            <td id="pm25_v1"></td>
+                        </tr>
+
+                        <tr>
+                            <td>9</td>
+                            <td>Filter Paper ID</td>
+                            <td><input id="pm25_fp_1"></td>
+                        </tr>
+
+                        <tr>
+                            <td>10</td>
+                            <td>Weight of Filter Paper + Dust W2 in grams</td>
+                            <td><input id="pm25_w2_1" type="number" step="any"></td>
+                        </tr>
+
+                        <tr>
+                            <td>11</td>
+                            <td>Weight of Filter Paper W1 in grams</td>
+                            <td><input id="pm25_w1_1" type="number" step="any"></td>
+                        </tr>
+
+                        <tr>
+                            <td>12</td>
+                            <td>Weight of Dust (W2 - W1)</td>
+                            <td id="pm25_dust1"></td>
+                        </tr>
+
+                        <tr>
+                            <td>13</td>
+                            <td>Particulate Matter PM2.5 (µg/m³) = ((W2 - W1) × 10⁶) / V</td>
+                            <td id="pm25_1"></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="btn-row">
+                    <button onclick="calculatePM25()">Calculate PM2.5</button>
+                    <button onclick="savePM25()">Save PM2.5</button>
+                </div>
+            </section>
+
+            <section class="section-card" id="section-report">
+                <h3>Generate Report</h3>
+                <div class="btn-row">
+                    <button class="report-btn" onclick="generateReport()">Generate Report / Print PDF</button>
+                    <button class="report-btn draft-btn" onclick="saveAsDraft()" style="margin-left: 10px; background-color: #f59e0b; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);">Complete Later (Save as Draft)</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+<script src="../js/app.js"></script>
+</body>
+</html>

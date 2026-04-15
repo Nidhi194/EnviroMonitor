@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login System</title>
+    <meta name="description" content="Login and signup access for EnviroMonitor agencies and industries.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://enviromonitor.in/pages/h.html">
+    <link rel="icon" type="image/png" href="../images/logo.png">
+    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="../css/glass-theme.css">
+    <style>
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        .password-wrapper input {
+            padding-right: 50px !important;
+        }
+        body.page-home .toggle-password,
+        .toggle-password {
+            position: absolute !important;
+            right: 14px !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            background: none !important;
+            border: none !important;
+            cursor: pointer !important;
+            padding: 4px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            color: #7f8ea3 !important;
+            transition: color 0.2s ease !important;
+            width: 32px !important;
+            height: 32px !important;
+            min-width: 0 !important;
+            min-height: 0 !important;
+            margin: 0 !important;
+            margin-top: 0 !important;
+            box-shadow: none !important;
+            border-radius: 6px !important;
+        }
+        body.page-home .toggle-password:hover,
+        .toggle-password:hover {
+            color: #2d5d98 !important;
+            transform: translateY(-50%) scale(1.1) !important;
+            filter: none !important;
+            background: rgba(45, 93, 152, 0.08) !important;
+        }
+        .toggle-password svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            pointer-events: none;
+        }
+
+        /* CUSTOM ROLE SELECTOR */
+        .role-selector-container {
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        .role-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .role-card {
+            position: relative;
+            background: #ffffff;
+            border: 1px solid var(--stroke);
+            border-radius: 12px;
+            padding: 14px 18px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+        }
+        .role-card.selected {
+            border-color: var(--brand-800);
+            background: rgba(16, 185, 129, 0.04);
+        }
+        .accent-bar {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: transparent;
+            transition: background 0.15s ease;
+        }
+        .role-card.selected .accent-bar {
+            background: var(--brand-800);
+        }
+        .card-content {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            gap: 14px;
+        }
+        .radio-circle {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--stroke);
+            border-radius: 50%;
+            position: relative;
+            transition: all 0.15s ease;
+            flex-shrink: 0;
+        }
+        .role-card.selected .radio-circle {
+            border-color: var(--brand-800);
+            background: var(--brand-800);
+        }
+        .role-card.selected .radio-circle::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px;
+            height: 6px;
+            background: #ffffff;
+            border-radius: 50%;
+        }
+        .icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.15s ease;
+        }
+        .industry-icon { background: rgba(16, 185, 129, 0.1); }
+        .agency-icon { background: rgba(14, 165, 233, 0.1); }
+        .role-card.selected .industry-icon { background: rgba(16, 185, 129, 0.2); }
+        .role-card.selected .agency-icon { background: rgba(14, 165, 233, 0.2); }
+
+        .icon-box svg {
+            width: 22px;
+            height: 22px;
+            stroke: var(--brand-800);
+        }
+        .role-info {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .role-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-strong);
+            display: block;
+            margin-bottom: 2px;
+        }
+        .role-desc {
+            font-size: 11px;
+            color: var(--text-muted);
+            display: block;
+        }
+        .badge-pill {
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 10px;
+            font-weight: 800;
+            background: var(--surface-soft);
+            color: var(--text-muted);
+            transition: all 0.15s ease;
+            letter-spacing: 0.5px;
+        }
+        .role-card.selected .badge-pill {
+            background: var(--brand-800);
+            color: #ffffff;
+        }
+
+        .info-strip {
+            position: relative;
+            padding: 12px 16px;
+            border-radius: 8px;
+            background: rgba(16, 185, 129, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(16, 185, 129, 0.1);
+        }
+        .strip-accent {
+            position: absolute;
+            left: 0;
+            top: 8px;
+            bottom: 8px;
+            width: 3px;
+            background: var(--brand-800);
+            border-radius: 0 4px 4px 0;
+        }
+        .info-strip p {
+            margin: 0 !important;
+            font-size: 12px;
+            line-height: 1.5;
+            color: var(--brand-800) !important;
+            text-align: left !important;
+        }
+    </style>
+    <style>
+        html, body {
+            height: 100vh !important;
+            overflow-y: auto !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        /* COMPACT FRAME ADJUSTMENTS */
+        body.page-home .main-wrapper {
+            height: min(96dvh, 96vh) !important;
+            max-height: min(96dvh, 96vh) !important;
+            min-height: unset !important;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            overflow: hidden !important;
+        }
+        body.page-home .left-panel {
+            width: 45% !important;
+            padding: 60px !important;
+            height: 100% !important;
+            overflow: hidden !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+        }
+        body.page-home .left-panel h1 {
+            font-size: clamp(2.5rem, 4vw, 3.5rem) !important;
+            margin-bottom: 16px !important;
+        }
+        body.page-home .left-panel .tagline {
+            font-size: 1.2rem !important;
+            margin-bottom: 30px !important;
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+        body.page-home .feature-list li {
+            font-size: 1.05rem !important;
+            line-height: 1.8 !important;
+            margin-bottom: 16px !important;
+        }
+        body.page-home .right-panel {
+            width: 55% !important;
+            padding: 40px 60px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            align-items: center !important;
+            background: transparent !important;
+            height: 100% !important;
+            overflow: hidden !important;
+        }
+        body.page-home .form-box-flat {
+            width: 100% !important;
+            max-width: 480px !important;
+            padding: 0 !important;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            height: auto !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+        }
+        body.page-home h2 {
+            font-size: 2rem !important;
+            margin-bottom: 15px !important;
+            color: var(--brand-800) !important;
+            font-weight: 800 !important;
+        }
+        body.page-home .right-panel > div:has(#registerForm[style*="display: flex"]) #title {
+            text-align: center !important;
+        }
+        .form-group {
+            margin-bottom: 16px !important;
+        }
+        .form-group label {
+            margin-bottom: 8px !important;
+            font-size: 0.95rem !important;
+            font-weight: 600 !important;
+            display: block !important;
+        }
+        .form-group input {
+            height: 48px !important;
+            font-size: 1rem !important;
+            padding: 10px 16px !important;
+            background: rgba(255, 255, 255, 0.1) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            color: var(--text-strong) !important;
+            width: 100% !important;
+        }
+        .role-selector-container {
+            margin-bottom: 16px !important;
+            padding: 0 !important;
+        }
+        .role-cards {
+            gap: 12px !important;
+            margin-bottom: 12px !important;
+        }
+        .role-card {
+            padding: 12px 16px !important;
+        }
+        .icon-box {
+            width: 36px !important;
+            height: 36px !important;
+        }
+        .icon-box svg {
+            width: 20px !important;
+            height: 20px !important;
+        }
+        .info-strip {
+            padding: 10px 14px !important;
+            margin-bottom: 14px !important;
+        }
+        body.page-home button {
+            height: 52px !important;
+            padding: 12px !important;
+            margin-top: 10px !important;
+            background: var(--brand-800) !important;
+            color: var(--accent) !important;
+            font-weight: 700 !important;
+            border: 1px solid var(--accent) !important;
+            border-radius: 8px !important;
+            text-transform: uppercase !important;
+            letter-spacing: 1px !important;
+            width: 100% !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            font-size: 1.05rem !important;
+        }
+        body.page-home button:hover {
+            background: var(--brand-700) !important;
+            transform: translateY(-2px) !important;
+        }
+        body.page-home p {
+            margin-top: 12px !important;
+            font-size: 0.95rem !important;
+        }
+
+        @media (max-width: 900px) {
+            body.page-home {
+                height: auto !important;
+                overflow-y: auto !important;
+            }
+            body.page-home .main-wrapper {
+                display: flex !important;
+                flex-direction: column !important;
+                height: auto !important;
+                max-height: none !important;
+                min-height: 100dvh !important;
+                overflow: visible !important;
+            }
+            body.page-home .left-panel,
+            body.page-home .right-panel {
+                width: 100% !important;
+                height: auto !important;
+                padding: 20px 14px !important;
+                overflow: visible !important;
+            }
+            body.page-home .left-panel h1 {
+                font-size: 2rem !important;
+                text-align: center !important;
+            }
+            body.page-home .left-panel .tagline,
+            body.page-home .feature-list {
+                text-align: center !important;
+            }
+            body.page-home .form-row {
+                grid-template-columns: 1fr !important;
+                gap: 10px !important;
+            }
+            body.page-home .right-panel > div {
+                max-width: 100% !important;
+            }
+        }
+    </style>
+</head>
+<body class="page-home">
+
+<div class="main-wrapper">
+    <div class="left-panel">
+        <h1>EnviroMonitor System</h1>
+        <div class="tagline">Environmental Monitoring &amp; Reporting Platform</div>
+
+        <ul class="feature-list">
+            <li>Monitor real-time air quality metrics</li>
+            <li>Ensure seamless environmental compliance</li>
+            <li>Access comprehensive industrial emission reports</li>
+        </ul>
+    </div>
+
+    <div class="right-panel">
+        <div style="display: flex; flex-direction: column; flex: 1; justify-content: space-between; width: 100%; max-width: 520px;">
+            <div class="icon" style="background: transparent; box-shadow: none; margin-bottom: 0;">
+                <img src="../images/logo.png" alt="EnviroMonitor Logo" style="height: 70px; width: auto; object-fit: contain;">
+            </div>
+            
+            <h2 id="title" style="margin: 0;">Welcome back</h2>
+
+            <!-- LOGIN FORM -->
+            <div id="loginForm" style="display: flex; flex-direction: column; gap: 10px;">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input id="loginEmail" type="email" placeholder="Enter email address">
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <div class="password-wrapper">
+                        <input id="loginPassword" type="password" placeholder="Enter password">
+                        <button type="button" class="toggle-password" onclick="togglePassword('loginPassword', this)" aria-label="Show password" style="width: auto !important; height: auto !important; margin: 0 !important; background: none !important; border: none !important; box-shadow: none !important;">
+                            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <button onclick="login()">Login</button>
+
+                <p>
+                    Don't have an account?
+                    <a href="#" onclick="showRegister(); return false;">Sign up</a>
+                </p>
+            </div>
+
+            <!-- REGISTER FORM -->
+            <div id="registerForm" style="display:none; flex-direction: column; justify-content: space-between; flex: 1;">
+                <p class="register-subtitle" style="margin: 0;">Choose your role before filling in your details</p>
+
+                <div class="role-selector-container">
+                    <label class="form-label">I AM A</label>
+                    <div class="role-cards">
+                        <!-- Industry Card -->
+                        <div class="role-card selected" id="card-industry" onclick="selectRole('Industry')">
+                            <div class="accent-bar"></div>
+                            <div class="card-content">
+                                <div class="radio-circle"></div>
+                                <div class="icon-box industry-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M9 8h10v13H9V8Z"></path><path d="M5 14h4v7H5v-7Z"></path><path d="M12 11h2"></path><path d="M12 15h2"></path><path d="M12 19h2"></path></svg>
+                                </div>
+                                <div class="role-info">
+                                    <span class="role-name">Industry</span>
+                                    <span class="role-desc">Industrial facilities</span>
+                                </div>
+                                <div class="badge-pill">FACILITY</div>
+                            </div>
+                        </div>
+                        <!-- Agency Card -->
+                        <div class="role-card" id="card-agency" onclick="selectRole('Monitoring Agency')">
+                            <div class="accent-bar"></div>
+                            <div class="card-content">
+                                <div class="radio-circle"></div>
+                                <div class="icon-box agency-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line><path d="M10 9a2 2 0 1 0 4 0 2 2 0 0 0-4 0Z"></path></svg>
+                                </div>
+                                <div class="role-info">
+                                    <span class="role-name">Agency</span>
+                                    <span class="role-desc">Regulatory bodies</span>
+                                </div>
+                                <div class="badge-pill">MONITOR</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-strip" id="roleInfoStrip">
+                        <div class="strip-accent"></div>
+                        <p id="stripText">As an Industry user, you will view your company’s environmental data, track compliance status, and access reports from your dashboard.</p>
+                    </div>
+                    
+                    <input type="hidden" id="role" name="role" value="Industry">
+                </div>
+
+                <div class="form-group">
+                    <label for="regEmail">Email</label>
+                    <input id="regEmail" type="email" placeholder="Create email address">
+                </div>
+
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <div class="form-group">
+                        <label for="regPassword">Password</label>
+                        <div class="password-wrapper">
+                            <input id="regPassword" type="password" placeholder="Create password">
+                            <button type="button" class="toggle-password" onclick="togglePassword('regPassword', this)" aria-label="Show password" style="width: auto !important; height: auto !important; margin: 0 !important; background: none !important; border: none !important; box-shadow: none !important;">
+                                <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <div class="password-wrapper">
+                            <input id="confirmPassword" type="password" placeholder="Confirm password">
+                            <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword', this)" aria-label="Show password" style="width: auto !important; height: auto !important; margin: 0 !important; background: none !important; border: none !important; box-shadow: none !important;">
+                                <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="register()">Create Account</button>
+
+                <p style="color: #ffffff !important;">
+                    Already have an account?
+                    <a href="#" onclick="showLogin(); return false;" style="color: inherit !important;">Login</a>
+                </p>
+            </div>
+
+            <h3 id="result" style="margin: 0;"></h3>
+        </div>
+    </div>
+</div>
+
+<script>
+    function togglePassword(inputId, btn) {
+        const input = document.getElementById(inputId);
+        const isPassword = input.type === 'password';
+        input.type = isPassword ? 'text' : 'password';
+        // Swap icon: open eye vs crossed eye
+        btn.innerHTML = isPassword
+            ? '<svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+            : '<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+        btn.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+    }
+
+    function selectRole(role) {
+        // Update hidden input
+        document.getElementById('role').value = role;
+        
+        // Update UI states
+        const industryCard = document.getElementById('card-industry');
+        const agencyCard = document.getElementById('card-agency');
+        const infoStrip = document.getElementById('roleInfoStrip');
+        const stripText = document.getElementById('stripText');
+        
+        if (role === 'Industry') {
+            industryCard.classList.add('selected');
+            agencyCard.classList.remove('selected');
+            stripText.innerText = "As an Industry user, you will view your company’s environmental data, track compliance status, and access reports from your dashboard.";
+            infoStrip.style.background = "rgba(16, 185, 129, 0.05)";
+            infoStrip.style.borderColor = "rgba(16, 185, 129, 0.1)";
+        } else {
+            industryCard.classList.remove('selected');
+            agencyCard.classList.add('selected');
+            stripText.innerText = "As a Monitoring Agency user, you will collect environmental data from sites, upload the readings, and generate reports based on the analysis.";
+            infoStrip.style.background = "rgba(14, 165, 233, 0.05)";
+            infoStrip.style.borderColor = "rgba(14, 165, 233, 0.1)";
+        }
+    }
+
+    function showRegister() {
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('registerForm').style.display = 'flex';
+        document.getElementById('title').innerText = 'Sign Up';
+    }
+
+    function showLogin() {
+        document.getElementById('registerForm').style.display = 'none';
+        document.getElementById('loginForm').style.display = 'flex';
+        document.getElementById('title').innerText = 'Welcome back';
+    }
+</script>
+<script src="../js/app.js?v=cache2"></script>
+</body>
+</html>

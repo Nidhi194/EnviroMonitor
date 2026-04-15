@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EnviroMonitor - Next Gen AQI Platform</title>
+    <meta name="description" content="EnviroMonitor is a next-generation environmental compliance platform for agencies and industries to track AQI, publish reports, and improve regulatory workflows.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://enviromonitor.in/">
+    <link rel="icon" type="image/png" href="../images/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkR4j8Y7qWfR4+6J0JQ1hYxP2m5x2l3w9A3w==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="../css/glass-theme.css">
+    <link rel="stylesheet" href="../css/landing.css">
+</head>
+<body class="page-landing dark-mode">
+
+    <!-- Global atmospheric noise texture -->
+    <div class="noise-overlay"></div>
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+
+    <div class="page-transition-overlay" id="transitionOverlay"></div>
+
+    <!-- Navigation Bar -->
+    <header class="glass-header">
+        <div class="header-content">
+            <div class="header-logo">
+                <img src="../images/logo.png" alt="EnviroMonitor Logo">
+                <span class="header-title">EnviroMonitor</span>
+            </div>
+            <nav class="header-nav">
+                <a href="#features">Platform</a>
+                <a href="#bento">Capabilities</a>
+                <a href="#workflow">Architecture</a>
+            </nav>
+            <div class="header-actions">
+                <button class="btn btn-ghost" onclick="navigateToLogin()">Sign In</button>
+                <button class="btn btn-emerald" onclick="navigateToLogin()">Get Started</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="scroll-container" id="scrollContainer">
+        
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content observe-fade-up">
+                <div class="pill-badge">
+                    <span class="pulse-dot"></span> EnviroMonitor 2.0 is Live
+                </div>
+                <h1 class="mega-title">
+                    The Modern Standard for <br>
+                    <span class="gradient-text">Environmental Compliance.</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Flawless data synchrony between industrial complexes and regulatory agencies. Zero friction. Absolute transparency.
+                </p>
+                <div class="hero-actions">
+                    <button class="btn btn-emerald btn-mega" onclick="navigateToLogin()">
+                        Build Your Profile <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                    <button class="btn btn-ghost btn-mega" onclick="document.getElementById('bento').scrollIntoView({behavior: 'smooth'})">
+                        View Demo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Parallax Hero Graphic -->
+            <div class="hero-graphic observe-fade-up" data-delay="200" id="heroGraphic">
+                <img src="../images/hero_globe.svg" alt="Abstract Globe 3D">
+            </div>
+        </section>
+
+        <!-- Bento Grid Section -->
+        <section id="bento" class="bento-section">
+            <div class="bento-header observe-fade-up">
+                <h2>Designed for absolute perfection.</h2>
+                <p>Every tool required for strict environmental adherence, wrapped in a phenomenal interface.</p>
+            </div>
+
+            <div class="bento-grid">
+                <!-- Large Feature Box -->
+                <div class="bento-box bento-large bento-analytics observe-fade-up">
+                    <div class="bento-art">
+                        <img src="../images/abstract_dash.svg" alt="Dashboard Illustration">
+                    </div>
+                    <div class="bento-stats-rail" aria-hidden="true">
+                        <div class="stat-rail-tile">
+                            <span class="stat-rail-kicker">AQI snapshot</span>
+                            <span class="stat-rail-num">42</span>
+                            <span class="stat-rail-sub">Good range</span>
+                        </div>
+                        <div class="stat-rail-tile">
+                            <span class="stat-rail-kicker">PM2.5 · PM10</span>
+                            <span class="stat-rail-num">Tracked</span>
+                            <span class="stat-rail-sub">Side-by-side panels</span>
+                        </div>
+                        <div class="stat-rail-tile">
+                            <span class="stat-rail-kicker">Refresh</span>
+                            <span class="stat-rail-num">Live</span>
+                            <span class="stat-rail-sub">Streamed to dashboards</span>
+                        </div>
+                        <div class="stat-rail-tile">
+                            <span class="stat-rail-kicker">Alerts</span>
+                            <span class="stat-rail-num">Auto-flag</span>
+                            <span class="stat-rail-sub">Threshold-based triggers</span>
+                        </div>
+                        <div class="stat-rail-tile">
+                            <span class="stat-rail-kicker">Reports</span>
+                            <span class="stat-rail-num">Instant</span>
+                            <span class="stat-rail-sub">PDF-ready formatting</span>
+                        </div>
+                        <div class="stat-rail-tile">
+                            <span class="stat-rail-kicker">Audit trail</span>
+                            <span class="stat-rail-num">Logged</span>
+                            <span class="stat-rail-sub">Timestamped history</span>
+                        </div>
+                    </div>
+                    <div class="bento-text">
+                        <div class="bento-topline" aria-hidden="true">
+                            <span class="bento-dot"></span>
+                            <span class="bento-topitem"><i class="fa-solid fa-wave-square"></i> Live AQI</span>
+                            <span class="bento-sep">•</span>
+                            <span class="bento-topitem"><i class="fa-solid fa-wind"></i> PM2.5 / PM10</span>
+                            <span class="bento-sep">•</span>
+                            <span class="bento-topitem"><i class="fa-solid fa-chart-line"></i> Insights</span>
+                        </div>
+                        <h3>Hyper-Responsive Analytics</h3>
+                        <p>Real-time sparklines, dynamic radial gauges, and complete PM10 / PM2.5 tracking integrated gracefully into one dashboard.</p>
+                    </div>
+                </div>
+
+                <!-- Small Box 1 -->
+                <div class="bento-box bento-mini bento-sync observe-fade-up" data-delay="100">
+                    <div class="bento-art">
+                        <img src="../images/report-bg.svg" alt="Instant Sync Visual">
+                    </div>
+                    <div class="bento-corner">
+                        <span class="corner-chip corner-chip-strong"><span class="corner-kpi">0.8s</span><span class="corner-label">median sync</span></span>
+                        <span class="corner-chip"><i class="fa-solid fa-shuffle"></i> Event stream</span>
+                    </div>
+                    <div class="bento-mini-text">
+                        <div class="bento-icon"><i class="fa-solid fa-bolt"></i></div>
+                        <h3>Instant Sync</h3>
+                        <p>Agencies push data, industries receive it instantly. The latency is practically zero.</p>
+                    </div>
+                </div>
+
+                <!-- Small Box 2 -->
+                <div class="bento-box bento-mini bento-pdf observe-fade-up" data-delay="200">
+                    <div class="bento-art">
+                        <img src="../images/abstract_dash.svg" alt="Automated PDF Visual">
+                    </div>
+                    <div class="bento-corner">
+                        <span class="corner-chip corner-chip-strong"><span class="corner-kpi">1</span><span class="corner-label">click export</span></span>
+                        <span class="corner-chip"><i class="fa-solid fa-circle-check"></i> Format-locked</span>
+                    </div>
+                    <div class="bento-mini-text">
+                        <div class="bento-icon"><i class="fa-solid fa-file-pdf"></i></div>
+                        <h3>Automated PDF</h3>
+                        <p>Generate perfectly formatted state-compliance reports with a single click.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Architecture Workflow -->
+        <section id="workflow" class="workflow-section">
+            <div class="workflow-header observe-fade-up">
+                <h2>How it works.</h2>
+                <p>A flawless pipeline from physical field sensors to regulatory compliance desks.</p>
+            </div>
+
+            <div class="workflow-timeline">
+                <div class="workflow-row observe-fade-up">
+                    <div class="workflow-num">01</div>
+                    <div class="workflow-desc">
+                        <h3>Agency Registration & Instrumentation</h3>
+                        <p>State-certified monitoring bodies establish secure profiles and register sensory deployment locales to the platform.</p>
+                    </div>
+                </div>
+                <div class="workflow-row observe-fade-up" data-delay="100">
+                    <div class="workflow-num">02</div>
+                    <div class="workflow-desc">
+                        <h3>Real-Time Data Ingestion</h3>
+                        <p>Environmental readings (SO2, NO2, AQI) are fed directly into the cloud matrix, securely timestamped and immutably stored.</p>
+                    </div>
+                </div>
+                <div class="workflow-row observe-fade-up" data-delay="200">
+                    <div class="workflow-num">03</div>
+                    <div class="workflow-desc">
+                        <h3>Industrial Synchronization</h3>
+                        <p>Linked corporate sectors instantly map this data against legal thresholds on their live tracking dashboard.</p>
+                    </div>
+                </div>
+                <div class="workflow-row observe-fade-up" data-delay="300">
+                    <div class="workflow-num">04</div>
+                    <div class="workflow-desc">
+                        <h3>Compliance Execution</h3>
+                        <p>Verified, tamper-proof compliance protocols are executed via automated official reports.</p>
+                    </div>
+                </div>
+                <div class="workflow-row observe-fade-up" data-delay="400">
+                    <div class="workflow-num">05</div>
+                    <div class="workflow-desc">
+                        <h3>Schedule an Ambient Check</h3>
+                        <p>Monitoring agencies schedule on-site ambient checks for industries, ensuring timely field verification and proactive compliance action.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mega Footer -->
+        <footer class="mega-footer">
+            <h2 class="observe-fade-up">Ready for the future of AQI?</h2>
+            <button class="btn btn-emerald btn-mega observe-fade-up" data-delay="100" onclick="navigateToLogin()">
+                Deploy EnviroMonitor
+            </button>
+
+            <div class="footer-base">
+                <div class="footer-logo">
+                    <img src="../images/logo.png" alt="Logo">
+                    <span>EnviroMonitor &copy; 2026. Elevating Standards.</span>
+                </div>
+                <div class="footer-links">
+                    <a href="/pages/privacy.html">Privacy</a>
+                    <a href="/pages/security.html">Security</a>
+                    <a href="/pages/terms.html">Terms</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Smooth Exit to Login
+        function navigateToLogin() {
+            document.body.classList.add('page-transition-active');
+            setTimeout(() => {
+                let basePath = (window.location.protocol.startsWith('http') && window.location.pathname === '/') ? 'pages/' : '';
+                window.location.href = basePath + "h.html";
+            }, 600);
+        }
+
+        // Return handling
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted || document.body.classList.contains('page-transition-active')) {
+                document.body.classList.remove('page-transition-active');
+            }
+        });
+
+        // Intersection Observer for scroll-triggered cinematic fades
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const delay = entry.target.getAttribute('data-delay') || 0;
+                    setTimeout(() => {
+                        entry.target.classList.add('in-view');
+                    }, delay);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.observe-fade-up').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Slight Parallax on Hero Graphic based on mouse move
+        const heroGraphic = document.getElementById('heroGraphic');
+        const isFinePointer = window.matchMedia('(pointer: fine)').matches;
+        if (isFinePointer) {
+            document.addEventListener('mousemove', (e) => {
+                if(!heroGraphic) return;
+            const x = (e.clientX / window.innerWidth - 0.5) * 20; // max 20px movement
+            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+            heroGraphic.style.transform = `translate(${x}px, ${y}px) rotateY(${x*0.5}deg)`;
+            });
+        }
+
+        // Header scroll effect
+        const header = document.querySelector('.glass-header');
+        const scrollContainer = document.getElementById('scrollContainer');
+        scrollContainer.addEventListener('scroll', () => {
+            if (scrollContainer.scrollTop > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
