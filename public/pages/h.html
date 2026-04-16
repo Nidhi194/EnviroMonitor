@@ -297,8 +297,113 @@
             padding: 10px 16px !important;
             background: rgba(255, 255, 255, 0.1) !important;
             border: 1px solid rgba(255, 255, 255, 0.2) !important;
-            color: var(--text-strong) !important;
+            color: #ffffff !important;
             width: 100% !important;
+        }
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6) !important;
+        }
+        
+        /* Steps Indicator */
+        .signup-steps {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            justify-content: center;
+        }
+        .step {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        .step.active {
+            background: var(--brand-800);
+            color: #ffffff;
+            border-color: var(--brand-800);
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+        }
+        .step.completed {
+            background: rgba(16, 185, 129, 0.3);
+            color: #ffffff;
+            border-color: var(--brand-800);
+        }
+        
+        /* Password Strength Meter */
+        .password-strength-meter {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+        .strength-bar {
+            height: 100%;
+            width: 0%;
+            border-radius: 2px;
+            transition: width 0.3s ease, background-color 0.3s ease;
+            background: #ef4444;
+        }
+        .strength-bar.weak {
+            width: 33%;
+            background: #f97316;
+        }
+        .strength-bar.fair {
+            width: 66%;
+            background: #eab308;
+        }
+        .strength-bar.good {
+            width: 100%;
+            background: #22c55e;
+        }
+        .strength-text {
+            font-size: 11px;
+            margin-top: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #ef4444;
+        }
+        .strength-text.weak {
+            color: #f97316;
+        }
+        .strength-text.fair {
+            color: #eab308;
+        }
+        .strength-text.good {
+            color: #22c55e;
+        }
+        
+        /* Trust & Security Badge */
+        .trust-security-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 14px;
+            border-radius: 8px;
+            background: rgba(34, 197, 94, 0.08);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            margin-bottom: 16px;
+            font-size: 12px;
+            color: #ffffff;
+        }
+        .trust-security-badge svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+            stroke: #22c55e;
+        }
+        .trust-security-badge strong {
+            color: #22c55e;
+            font-weight: 700;
         }
         .role-selector-container {
             margin-bottom: 16px !important;
@@ -437,6 +542,13 @@
             <div id="registerForm" style="display:none; flex-direction: column; justify-content: space-between; flex: 1;">
                 <p class="register-subtitle" style="margin: 0;">Choose your role before filling in your details</p>
 
+                <!-- Steps Indicator -->
+                <div class="signup-steps">
+                    <div class="step active" id="step1">1</div>
+                    <div class="step" id="step2">2</div>
+                    <div class="step" id="step3">3</div>
+                </div>
+
                 <div class="role-selector-container">
                     <label class="form-label">I AM A</label>
                     <div class="role-cards">
@@ -480,6 +592,12 @@
                     <input type="hidden" id="role" name="role" value="Industry">
                 </div>
 
+                <!-- Trust & Security Badge -->
+                <div class="trust-security-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    <div><strong>Bank-Grade Security</strong> – Your data is encrypted and protected</div>
+                </div>
+
                 <div class="form-group">
                     <label for="regEmail">Email</label>
                     <input id="regEmail" type="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Please enter a valid professional email address" placeholder="Create email address">
@@ -489,11 +607,15 @@
                     <div class="form-group">
                         <label for="regPassword">Password</label>
                         <div class="password-wrapper">
-                            <input id="regPassword" type="password" placeholder="Create password">
+                            <input id="regPassword" type="password" placeholder="Create password" oninput="checkPasswordStrength('regPassword')">
                             <button type="button" class="toggle-password" onclick="togglePassword('regPassword', this)" aria-label="Show password" style="width: auto !important; height: auto !important; margin: 0 !important; background: none !important; border: none !important; box-shadow: none !important;">
                                 <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                             </button>
                         </div>
+                        <div class="password-strength-meter">
+                            <div class="strength-bar" id="strengthBar"></div>
+                        </div>
+                        <div class="strength-text" id="strengthText"></div>
                     </div>
 
                     <div class="form-group">
@@ -561,6 +683,7 @@
         document.getElementById('loginForm').style.display = 'none';
         document.getElementById('registerForm').style.display = 'flex';
         document.getElementById('title').innerText = 'Sign Up';
+        updateSteps();
     }
 
     function showLogin() {
@@ -568,6 +691,104 @@
         document.getElementById('loginForm').style.display = 'flex';
         document.getElementById('title').innerText = 'Welcome back';
     }
+
+    function checkPasswordStrength(inputId) {
+        const password = document.getElementById(inputId).value;
+        const bar = document.getElementById('strengthBar');
+        const text = document.getElementById('strengthText');
+        
+        if (!password) {
+            bar.className = 'strength-bar';
+            text.className = 'strength-text';
+            text.innerText = '';
+            return;
+        }
+        
+        let strength = 0;
+        
+        // Length check
+        if (password.length >= 8) strength += 1;
+        if (password.length >= 12) strength += 1;
+        
+        // Uppercase
+        if (/[A-Z]/.test(password)) strength += 1;
+        
+        // Lowercase
+        if (/[a-z]/.test(password)) strength += 1;
+        
+        // Numbers
+        if (/[0-9]/.test(password)) strength += 1;
+        
+        // Special characters
+        if (/[!@#$%^&*()_+=\-\[\]{};':"\\|,.<>\/?]/.test(password)) strength += 1;
+        
+        // Determine strength level
+        let strengthClass = '';
+        let strengthLabel = '';
+        
+        if (strength <= 2) {
+            strengthClass = 'weak';
+            strengthLabel = 'Weak Password';
+        } else if (strength <= 4) {
+            strengthClass = 'fair';
+            strengthLabel = 'Fair Password';
+        } else {
+            strengthClass = 'good';
+            strengthLabel = 'Strong Password';
+        }
+        
+        bar.className = `strength-bar ${strengthClass}`;
+        text.className = `strength-text ${strengthClass}`;
+        text.innerText = strengthLabel;
+        
+        // Update step 2
+        updateSteps();
+    }
+
+    function updateSteps() {
+        // Check completion of each step
+        const roleSelected = document.getElementById('role').value !== '';
+        const emailFilled = document.getElementById('regEmail').value.trim() !== '';
+        const passwordFilled = document.getElementById('regPassword').value.trim() !== '';
+        const confirmFilled = document.getElementById('confirmPassword').value.trim() !== '';
+        
+        // Step 1: Role Selection (always active when signup is shown)
+        const step1 = document.getElementById('step1');
+        step1.classList.add('active');
+        
+        // Step 2: Email & Role (completed if role is selected)
+        const step2 = document.getElementById('step2');
+        if (roleSelected && emailFilled) {
+            step2.classList.add('completed');
+            step2.classList.remove('active');
+            if (document.getElementById('regEmail') === document.activeElement) {
+                step2.classList.add('active');
+                step2.classList.remove('completed');
+            }
+        } else {
+            step2.classList.remove('completed');
+        }
+        
+        // Step 3: Password (completed if passwords match and filled)
+        const step3 = document.getElementById('step3');
+        if (passwordFilled && confirmFilled && document.getElementById('regPassword').value === document.getElementById('confirmPassword').value) {
+            step3.classList.add('completed');
+            step3.classList.remove('active');
+        } else {
+            step3.classList.remove('completed');
+        }
+    }
+
+    // Add event listeners to update steps as form is filled
+    document.addEventListener('DOMContentLoaded', function() {
+        const regEmail = document.getElementById('regEmail');
+        const regPassword = document.getElementById('regPassword');
+        const confirmPassword = document.getElementById('confirmPassword');
+        
+        if (regEmail) regEmail.addEventListener('input', updateSteps);
+        if (regPassword) regPassword.addEventListener('input', updateSteps);
+        if (confirmPassword) confirmPassword.addEventListener('input', updateSteps);
+    });
 </script>
 <script src="../js/app.js?v=cache2"></script>
 </body>

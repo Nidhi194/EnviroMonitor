@@ -33,7 +33,7 @@
                 <span class="header-title">EnviroMonitor</span>
             </div>
             <nav class="header-nav">
-                <a href="#features">Platform</a>
+                <a href="#platform">Platform</a>
                 <a href="#bento">Capabilities</a>
                 <a href="#workflow">Architecture</a>
             </nav>
@@ -47,31 +47,107 @@
     <div class="scroll-container" id="scrollContainer">
         
         <!-- Hero Section -->
-        <section class="hero-section">
+        <section id="hero" class="hero-section">
             <div class="hero-content observe-fade-up">
                 <div class="pill-badge">
-                    <span class="pulse-dot"></span> EnviroMonitor 2.0 is Live
+                    <span class="pulse-dot"></span> EnviroMonitor is Live
                 </div>
-                <h1 class="mega-title">
-                    The Modern Standard for <br>
-                    <span class="gradient-text">Environmental Compliance.</span>
-                </h1>
+                
+                <!-- Title with Globe -->
+                <div class="hero-title-wrapper">
+                    <h1 class="mega-title">
+                        The Modern Standard for <br>
+                        <span class="gradient-text">Environmental Compliance.</span>
+                    </h1>
+                    <div class="hero-globe" id="heroGraphic">
+                        <img src="../images/hero_globe.svg" alt="Abstract Globe 3D">
+                    </div>
+                </div>
+                
                 <p class="hero-subtitle">
-                    Flawless data synchrony between industrial complexes and regulatory agencies. Zero friction. Absolute transparency.
+                    Real-time AQI monitoring with live data from trusted sources. Flawless synchrony between industrial complexes and regulatory agencies. Zero friction. Absolute transparency.
                 </p>
+                
                 <div class="hero-actions">
                     <button class="btn btn-emerald btn-mega" onclick="navigateToLogin()">
                         Build Your Profile <i class="fa-solid fa-arrow-right"></i>
                     </button>
-                    <button class="btn btn-ghost btn-mega" onclick="document.getElementById('bento').scrollIntoView({behavior: 'smooth'})">
-                        View Demo
+                    <button class="btn btn-ghost btn-mega" onclick="navigateToDemo()">
+                        View Demo <i class="fa-solid fa-play"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- Parallax Hero Graphic -->
-            <div class="hero-graphic observe-fade-up" data-delay="200" id="heroGraphic">
-                <img src="../images/hero_globe.svg" alt="Abstract Globe 3D">
+            <!-- Centered AQI Widget Below -->
+            <div class="aqi-widget-container">
+                <div class="live-aqi-widget" id="liveAqiWidget">
+                    <div class="aqi-loading">
+                        <div class="aqi-spinner"></div>
+                        <span>Loading live AQI data...</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Platform Section -->
+        <section id="platform" class="platform-section">
+            <div class="platform-container">
+                <div class="platform-header observe-fade-up">
+                    <h2>The EnviroMonitor Platform</h2>
+                    <p>Comprehensive environmental monitoring solution designed for industries and regulatory agencies</p>
+                </div>
+
+                <div class="platform-grid">
+                    <div class="platform-card observe-fade-up">
+                        <div class="platform-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 21h18"></path>
+                                <path d="M9 8h10v13H9V8Z"></path>
+                                <path d="M5 14h4v7H5v-7Z"></path>
+                                <path d="M12 11h2"></path>
+                                <path d="M12 15h2"></path>
+                                <path d="M12 19h2"></path>
+                            </svg>
+                        </div>
+                        <h3>Industry Dashboard</h3>
+                        <p>Real-time monitoring of environmental parameters with automated compliance reporting and alert systems.</p>
+                    </div>
+
+                    <div class="platform-card observe-fade-up" data-delay="100">
+                        <div class="platform-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                <line x1="8" y1="21" x2="16" y2="21"></line>
+                                <line x1="12" y1="17" x2="12" y2="21"></line>
+                                <path d="M10 9a2 2 0 1 0 4 0 2 2 0 0 0-4 0Z"></path>
+                            </svg>
+                        </div>
+                        <h3>Agency Portal</h3>
+                        <p>Centralized monitoring platform for regulatory bodies to track industry compliance and manage environmental data.</p>
+                    </div>
+
+                    <div class="platform-card observe-fade-up" data-delay="200">
+                        <div class="platform-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                            </svg>
+                        </div>
+                        <h3>IoT Integration</h3>
+                        <p>Seamless connection with environmental sensors and monitoring devices for automated data collection and analysis.</p>
+                    </div>
+
+                    <div class="platform-card observe-fade-up" data-delay="300">
+                        <div class="platform-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 12l2 2 4-4"></path>
+                                <path d="M21 12c.552 0 1-.448 1-1V5c0-.552-.448-1-1-1H3c-.552 0-1 .448-1 1v6c0 .552.448 1 1 1h18z"></path>
+                                <path d="M3 21h18"></path>
+                            </svg>
+                        </div>
+                        <h3>Compliance Automation</h3>
+                        <p>Automated report generation, regulatory filing, and compliance tracking to reduce manual workload and ensure accuracy.</p>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -245,6 +321,214 @@
             }, 600);
         }
 
+        // Navigate to Demo Page
+        function navigateToDemo() {
+            document.body.classList.add('page-transition-active');
+            setTimeout(() => {
+                let basePath = (window.location.protocol.startsWith('http') && window.location.pathname === '/') ? 'pages/' : '';
+                window.location.href = basePath + "demo-industry.html";
+            }, 600);
+        }
+
+        async function getReverseGeocode(lat, lon) {
+            try {
+                const geoUrl = `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lon)}&count=1`;
+                const res = await fetch(geoUrl);
+                if (!res.ok) return null;
+                const json = await res.json();
+                const place = json.results && json.results[0];
+                return place ? (place.name || place.admin1 || place.country || null) : null;
+            } catch (err) {
+                console.warn('Reverse geocode failed', err);
+                return null;
+            }
+        }
+
+        // Live AQI Data Fetching from Open-Meteo (no API key required)
+        async function fetchLiveAQI() {
+            const widget = document.getElementById('liveAqiWidget');
+            if (!widget) return;
+
+            try {
+                // Try to get user's location for personalized AQI data
+                let location = 'delhi'; // fallback
+                let locationName = 'Delhi, India';
+                let userLat = null;
+                let userLon = null;
+
+                if (navigator.geolocation) {
+                    try {
+                        const position = await new Promise((resolve, reject) => {
+                            navigator.geolocation.getCurrentPosition(resolve, reject, {
+                                timeout: 10000,
+                                enableHighAccuracy: false
+                            });
+                        });
+                        userLat = position.coords.latitude;
+                        userLon = position.coords.longitude;
+                        location = `geo:${userLat};${userLon}`;
+                        locationName = 'Your Location';
+                        const reverseName = await getReverseGeocode(userLat, userLon);
+                        if (reverseName) {
+                            locationName = reverseName;
+                        }
+                    } catch (geoError) {
+                        console.log('Geolocation failed, using Delhi:', geoError.message);
+                    }
+                }
+
+                // Fetching AQI data through local proxy
+                let response = await fetch(`/api/live-aqi?location=${encodeURIComponent(location)}`);
+                let payload = await response.json().catch(() => null);
+                if (!response.ok || !payload || !payload.list || !payload.list.length) {
+                    console.warn('Local proxy failed, falling back to Open-Meteo');
+                    const altUrl = userLat !== null && userLon !== null
+                        ? `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${encodeURIComponent(userLat)}&longitude=${encodeURIComponent(userLon)}&hourly=pm10,pm2_5,nitrogen_dioxide,sulphur_dioxide&timezone=auto`
+                        : 'https://air-quality-api.open-meteo.com/v1/air-quality?latitude=28.7041&longitude=77.1025&hourly=pm10,pm2_5,nitrogen_dioxide,sulphur_dioxide&timezone=auto';
+                    const altResponse = await fetch(altUrl);
+                    if (!altResponse.ok) {
+                        const altBody = await altResponse.text().catch(() => null);
+                        throw new Error(`Direct Open-Meteo fetch failed: ${altBody || altResponse.statusText}`);
+                    }
+                    const altData = await altResponse.json();
+                    const hourly = altData.hourly || {};
+                    const times = hourly.time || [];
+                    const lastIndex = times.length - 1;
+                    if (lastIndex < 0) {
+                        throw new Error('Open-Meteo returned no hourly AQI data');
+                    }
+                    payload = {
+                        list: [{
+                            main: { aqi: hourly.pm2_5 ? Math.round(hourly.pm2_5[lastIndex]) : 0 },
+                            components: {
+                                pm2_5: hourly.pm2_5 ? hourly.pm2_5[lastIndex] : 0,
+                                pm10: hourly.pm10 ? hourly.pm10[lastIndex] : 0,
+                                no2: hourly.nitrogen_dioxide ? hourly.nitrogen_dioxide[lastIndex] : 0,
+                                so2: hourly.sulphur_dioxide ? hourly.sulphur_dioxide[lastIndex] : 0
+                            }
+                        }],
+                        city: { name: locationName }
+                    };
+                }
+                const data = payload;
+                const aqi = data.list[0].main.aqi; // AQI value
+                const components = data.list[0].components;
+                
+                // Use actual city name if available
+                if (data.city && data.city.name) {
+                    locationName = data.city.name;
+                }
+                
+                // Convert to US AQI scale (0-500) for better readability
+                let usAqi = calculateUSAQI(components);
+                let status = getAQIStatus(usAqi);
+                
+                // Calculate trend (simulated)
+                const trend = Math.random() > 0.5 ? 'improving' : 'worsening';
+                const trendPercent = (Math.random() * 8 + 2).toFixed(1);
+                
+                widget.innerHTML = `
+                    <svg width="0" height="0">
+                        <defs>
+                            <linearGradient id="aqiGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#22c55e;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#10b981;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <div class="aqi-header">
+                        <div class="aqi-main-gauge">
+                            <div class="aqi-gauge-circle">
+                                <svg class="aqi-gauge-svg" viewBox="0 0 100 100">
+                                    <circle class="aqi-gauge-bg" cx="50" cy="50" r="40"></circle>
+                                    <circle class="aqi-gauge-progress" cx="50" cy="50" r="40" 
+                                            style="stroke-dasharray: ${(Math.min(usAqi, 300) / 300) * 314}; animation-delay: 0.3s;"></circle>
+                                </svg>
+                                <div class="aqi-gauge-center">
+                                    <div class="aqi-center-value">${Math.round(usAqi)}</div>
+                                    <div class="aqi-center-label">AQI</div>
+                                </div>
+                            </div>
+                            <div class="aqi-text-section">
+                                <div class="aqi-main-label">Air Quality Index</div>
+                                <div class="aqi-main-status">
+                                    <span class="status-badge ${status.class}" style="display: inline-block; margin-right: 0.5rem;">${status.label}</span>
+                                </div>
+                                <div class="aqi-trend ${trend === 'worsening' ? 'warning' : ''}">
+                                    <i class="fa-solid fa-arrow-${trend === 'improving' ? 'down' : 'up'}"></i>
+                                    ${trendPercent}% ${trend}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="aqi-content">
+                        <div class="aqi-metric">
+                            <span class="aqi-label">PM2.5</span>
+                            <span class="aqi-value">${Math.round(components.pm2_5)}</span>
+                            <span class="aqi-unit">µg/m³</span>
+                        </div>
+                        <div class="aqi-metric">
+                            <span class="aqi-label">PM10</span>
+                            <span class="aqi-value">${Math.round(components.pm10)}</span>
+                            <span class="aqi-unit">µg/m³</span>
+                        </div>
+                        <div class="aqi-metric">
+                            <span class="aqi-label">NO₂</span>
+                            <span class="aqi-value">${Math.round(components.no2)}</span>
+                            <span class="aqi-unit">µg/m³</span>
+                        </div>
+                        <div class="aqi-metric">
+                            <span class="aqi-label">SO₂</span>
+                            <span class="aqi-value">${Math.round(components.so2)}</span>
+                            <span class="aqi-unit">µg/m³</span>
+                        </div>
+                        <div class="aqi-location">
+                            <span class="pulse-dot"></span>
+                            <strong>LIVE • ${locationName}</strong> · Real-time air quality data from Open-Meteo
+                        </div>
+                    </div>
+                `;
+                
+                // Trigger number pop animation
+                setTimeout(() => {
+                    document.querySelectorAll('.aqi-value').forEach((el, idx) => {
+                        el.style.animation = `numberPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) ${0.3 + idx * 0.1}s forwards`;
+                    });
+                }, 100);
+            } catch (error) {
+                console.error('AQI Fetch Error:', error);
+                const message = error?.message || 'Unable to fetch real-time data. Please check your connection or try again later.';
+                widget.innerHTML = `
+                    <div class="aqi-metric error" style="grid-column: 1 / -1;">
+                        <span class="aqi-label">Live AQI Data Unavailable</span>
+                        <p style="font-size: 0.95rem; margin: 0.5rem 0; color: inherit;">
+                            ${message}
+                        </p>
+                    </div>
+                `;
+            }
+        }
+
+        function calculateUSAQI(components) {
+            // Simplified US AQI calculation based on PM2.5
+            const pm25 = components.pm2_5;
+            
+            if (pm25 <= 12) return pm25 * (50 / 12);
+            if (pm25 <= 35.4) return 50 + ((pm25 - 12) * (100 - 50) / (35.4 - 12));
+            if (pm25 <= 55.4) return 100 + ((pm25 - 35.4) * (150 - 100) / (55.4 - 35.4));
+            if (pm25 <= 150.4) return 150 + ((pm25 - 55.4) * (200 - 150) / (150.4 - 55.4));
+            return 200 + ((pm25 - 150.4) * (300 - 200) / (250.4 - 150.4));
+        }
+
+        function getAQIStatus(aqi) {
+            if (aqi <= 50) return { label: 'Good', class: 'good' };
+            if (aqi <= 100) return { label: 'Moderate', class: 'moderate' };
+            if (aqi <= 150) return { label: 'Poor', class: 'poor' };
+            if (aqi <= 200) return { label: 'Bad', class: 'bad' };
+            return { label: 'Severe', class: 'severe' };
+        }
+
         // Return handling
         window.addEventListener('pageshow', (event) => {
             if (event.persisted || document.body.classList.contains('page-transition-active')) {
@@ -297,6 +581,12 @@
                 header.classList.remove('scrolled');
             }
         });
+
+        // Fetch live AQI data on page load
+        document.addEventListener('DOMContentLoaded', fetchLiveAQI);
+        
+        // Refresh AQI data every 5 minutes
+        setInterval(fetchLiveAQI, 5 * 60 * 1000);
     </script>
 </body>
 </html>

@@ -5,6 +5,7 @@ const mysql = require('mysql2');
 const cors = require('cors');
 const path = require('path');
 const bcrypt = require('bcrypt');
+const https = require('https');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -74,6 +75,70 @@ const db = mysql.createPool({
 });
 
 const dbPromise = db.promise();
+
+app.get('/api/live-aqi', authLimiter, async (req, res) => {
+    const location = req.query.location || 'delhi';
+    let latitude = 28.7041;
+    let longitude = 77.1025;
+    let locationLabel = 'Delhi, India';
+
+    if (location.startsWith('geo:')) {
+        const coords = location.slice(4).split(';');
+        if (coords.length === 2) {
+            const parsedLat = parseFloat(coords[0]);
+            const parsedLon = parseFloat(coords[1]);
+            if (Number.isFinite(parsedLat) && Number.isFinite(parsedLon)) {
+                latitude = parsedLat;
+                longitude = parsedLon;
+                locationLabel = 'Your Location';
+            }
+        }
+    }
+
+    try {
+        const apiUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${encodeURIComponent(latitude)}&longitude=${encodeURIComponent(longitude)}&hourly=pm10,pm2_5,nitrogen_dioxide,sulphur_dioxide&timezone=auto`;
+        const data = await new Promise((resolve, reject) => {
+            https.get(apiUrl, (response) => {
+                let body = '';
+                response.on('data', (chunk) => body += chunk);
+                response.on('end', () => {
+                    if (response.statusCode !== 200) {
+                        reject(new Error(`HTTP ${response.statusCode}: ${body}`));
+                    } else {
+                        resolve(body);
+                    }
+                });
+            }).on('error', reject);
+        });
+
+        const payload = JSON.parse(data);
+        const hourly = payload.hourly || {};
+        const times = hourly.time || [];
+        const lastIndex = times.length - 1;
+        if (lastIndex < 0) {
+            throw new Error('No hourly AQI data available');
+        }
+
+        const transformed = {
+            list: [{
+                main: { aqi: hourly.pm2_5 ? Math.round(hourly.pm2_5[lastIndex]) : 0 },
+                components: {
+                    pm2_5: hourly.pm2_5 ? hourly.pm2_5[lastIndex] : 0,
+                    pm10: hourly.pm10 ? hourly.pm10[lastIndex] : 0,
+                    no2: hourly.nitrogen_dioxide ? hourly.nitrogen_dioxide[lastIndex] : 0,
+                    so2: hourly.sulphur_dioxide ? hourly.sulphur_dioxide[lastIndex] : 0
+                }
+            }],
+            city: { name: locationLabel }
+        };
+
+        res.setHeader('Cache-Control', 'public, max-age=300, stale-while-revalidate=60');
+        return res.json(transformed);
+    } catch (error) {
+        console.error('Live AQI proxy error:', error);
+        return res.status(500).json({ error: 'Unable to fetch live AQI data', details: error.message });
+    }
+});
 
 const PROFESSIONAL_EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
