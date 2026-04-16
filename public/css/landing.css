@@ -431,6 +431,105 @@ html, body.page-landing {
     display: none;
 }
 
+/* Platform Section */
+.platform-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 8rem 3rem;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.02) 0%, rgba(14, 165, 233, 0.02) 100%);
+}
+.platform-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.platform-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+.platform-header h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    letter-spacing: -2px;
+    margin-bottom: 1rem;
+    background: linear-gradient(to right, var(--emerald-primary), var(--cyan-primary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.platform-header p {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+.platform-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+.platform-card {
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-glass);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+.platform-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--emerald-primary), var(--cyan-primary));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.platform-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    border-color: rgba(16, 185, 129, 0.3);
+}
+.platform-card:hover::before {
+    opacity: 1;
+}
+.platform-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.5rem;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(14, 165, 233, 0.1));
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+.platform-icon svg {
+    width: 32px;
+    height: 32px;
+    stroke: var(--emerald-primary);
+}
+.platform-card h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text-strong);
+}
+.platform-card p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
 /* Bento Grid */
 .bento-section {
     max-width: 1400px;
