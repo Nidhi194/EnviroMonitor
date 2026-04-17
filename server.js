@@ -63,16 +63,22 @@ app.use((req, res, next) => {
 });
 app.use(express.static(path.join(__dirname, 'public')));
 
-const db = mysql.createPool({
+const dbConfig = {
     host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 3306,
+    port: Number(process.env.DB_PORT) || 3306,
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'user_db',
-    connectionLimit: 10,
+    connectionLimit: Number(process.env.DB_CONNECTION_LIMIT) || 10,
     waitForConnections: true,
     queueLimit: 0
-});
+};
+
+if (String(process.env.DB_SSL || '').toLowerCase() === 'true') {
+    dbConfig.ssl = { rejectUnauthorized: String(process.env.DB_SSL_REJECT_UNAUTHORIZED || 'true').toLowerCase() === 'true' };
+}
+
+const db = mysql.createPool(dbConfig);
 
 const dbPromise = db.promise();
 
@@ -310,7 +316,7 @@ db.getConnection((err, connection) => {
     if (err) {
         console.log('❌ DB Error:', err.message);
     } else {
-        console.log('✅ Connected to Railway MySQL');
+       console.log(`✅ Connected to MySQL at ${process.env.DB_HOST}`);
         connection.release();
     }
 });
