@@ -332,12 +332,23 @@
 
         async function getReverseGeocode(lat, lon) {
             try {
-                const geoUrl = `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lon)}&count=1`;
-                const res = await fetch(geoUrl);
+                const geoUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}&zoom=10&addressdetails=1`;
+                const res = await fetch(geoUrl, {
+                    headers: {
+                        'User-Agent': 'EnviroMonitor/1.0 (https://enviromonitor.in)'
+                    }
+                });
                 if (!res.ok) return null;
                 const json = await res.json();
-                const place = json.results && json.results[0];
-                return place ? (place.name || place.admin1 || place.country || null) : null;
+                if (json && json.display_name) {
+                    const address = json.address || {};
+                    const city = address.city || address.town || address.village || address.hamlet;
+                    const state = address.state;
+                    const country = address.country;
+                    const parts = [city, state, country].filter(Boolean);
+                    return parts.slice(0, 2).join(', ') || json.display_name.split(',')[0];
+                }
+                return null;
             } catch (err) {
                 console.warn('Reverse geocode failed', err);
                 return null;
@@ -411,7 +422,7 @@
                     };
                 }
                 const data = payload;
-                const aqi = data.list[0].main.aqi; // AQI value
+                const aqi = data.list[0].main.aqi; // Use server's calculated AQI
                 const components = data.list[0].components;
                 
                 // Use actual city name if available
@@ -419,8 +430,8 @@
                     locationName = data.city.name;
                 }
                 
-                // Convert to US AQI scale (0-500) for better readability
-                let usAqi = calculateUSAQI(components);
+                // Use server's AQI value directly (already calculated properly)
+                let usAqi = aqi;
                 let status = getAQIStatus(usAqi);
                 
                 // Calculate trend (simulated)

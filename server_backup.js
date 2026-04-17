@@ -10,7 +10,7 @@ const path = require('path');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const session = require('express-session');
-const RedisStore = require('connect-redis').default;
+const RedisStore = require('connect-redis')(session);
 const redis = require('redis');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
@@ -30,32 +30,32 @@ const SESSION_SECRET = process.env.SESSION_SECRET || 'your-session-secret-change
 const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
 
 // Logger setup
-const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.errors({ stack: true }),
-    winston.format.json()
-  ),
-  defaultMeta: { service: 'enviromonitor' },
-  transports: [
-    new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'logs/combined.log' }),
-  ],
-});
+// const logger = winston.createLogger({
+//   level: 'info',
+//   format: winston.format.combine(
+//     winston.format.timestamp(),
+//     winston.format.errors({ stack: true }),
+//     winston.format.json()
+//   ),
+//   defaultMeta: { service: 'enviromonitor' },
+//   transports: [
+//     new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
+//     new winston.transports.File({ filename: 'logs/combined.log' }),
+//   ],
+// });
 
-if (NODE_ENV !== 'production') {
-  logger.add(new winston.transports.Console({
-    format: winston.format.simple(),
-  }));
-}
+// if (NODE_ENV !== 'production') {
+//   logger.add(new winston.transports.Console({
+//     format: winston.format.simple(),
+//   }));
+// }
 
 // Redis client for sessions
 let redisClient = null;
 if (REDIS_URL !== 'redis://localhost:6379' || process.env.REDIS_HOST) {
   redisClient = redis.createClient({ url: REDIS_URL });
-  redisClient.on('error', (err) => logger.error('Redis Client Error', err));
-  redisClient.connect().catch(logger.error);
+  redisClient.on('error', (err) => console.error('Redis Client Error', err));
+  redisClient.connect().catch(console.error);
 }
 
 const app = express();
@@ -132,7 +132,7 @@ app.use(session({
 // Logging middleware
 app.use(morgan('combined', {
   stream: {
-    write: (message) => logger.info(message.trim())
+    write: (message) => console.log(message.trim())
   }
 }));
 
@@ -234,21 +234,21 @@ const dbPromise = db.promise();
 
 // Database connection error handling
 db.on('connection', (connection) => {
-    logger.info('Database connected');
+    console.log('Database connected');
     connection.on('error', (err) => {
-        logger.error('Database connection error:', err);
+        console.error('Database connection error:', err);
     });
 });
 
 db.on('error', (err) => {
-    logger.error('Database pool error:', err);
+    console.error('Database pool error:', err);
 });
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
     db.getConnection((err, connection) => {
         if (err) {
-            logger.error('Health check failed:', err);
+            console.error('Health check failed:', err);
             return res.status(503).json({
                 status: 'error',
                 database: 'disconnected',
@@ -267,17 +267,17 @@ app.get('/api/health', (req, res) => {
 
 // Graceful shutdown
 process.on('SIGTERM', () => {
-    logger.info('SIGTERM received, shutting down gracefully');
+    console.log('SIGTERM received, shutting down gracefully');
     db.end(() => {
-        logger.info('Database connections closed');
+        console.log('Database connections closed');
         process.exit(0);
     });
 });
 
 process.on('SIGINT', () => {
-    logger.info('SIGINT received, shutting down gracefully');
+    console.log('SIGINT received, shutting down gracefully');
     db.end(() => {
-        logger.info('Database connections closed');
+        console.log('Database connections closed');
         process.exit(0);
     });
 });
@@ -753,7 +753,7 @@ const authenticateToken = (req, res, next) => {
 
     jwt.verify(token, JWT_SECRET, (err, user) => {
         if (err) {
-            logger.warn('Invalid token attempt:', err.message);
+            console.warn('Invalid token attempt:', err.message);
             return res.status(403).json({ error: 'Invalid or expired token' });
         }
         req.user = user;
@@ -783,7 +783,7 @@ app.post('/register', authLimiter, [
                 if (err.code === 'ER_DUP_ENTRY') {
                     return res.status(409).json({ error: 'User already exists' });
                 }
-                logger.error('Registration error:', err);
+                console.error('Registration error:', err);
                 return res.status(500).json({ error: 'Registration failed' });
             }
 
@@ -801,7 +801,7 @@ app.post('/register', authLimiter, [
             });
         });
     } catch (error) {
-        logger.error('Registration hash error:', error);
+        console.error('Registration hash error:', error);
         res.status(500).json({ error: 'Registration failed' });
     }
 });
@@ -823,7 +823,7 @@ app.post('/login', authLimiter, [
 
     db.query(sql, [normalizedEmail], async (err, result) => {
         if (err) {
-            logger.error('Login database error:', err);
+            console.error('Login database error:', err);
             return res.status(500).json({ error: 'Login failed' });
         }
 
@@ -862,7 +862,7 @@ app.post('/login', authLimiter, [
                 try {
                     industryProfile = await getIndustryProfileByUserEmail(user.email);
                 } catch (profileErr) {
-                    logger.error('Industry profile fetch error:', profileErr);
+                    console.error('Industry profile fetch error:', profileErr);
                 }
             }
 
@@ -877,7 +877,7 @@ app.post('/login', authLimiter, [
                     : (user.role === 'Monitoring Agency' ? 'agency.html' : '')
             });
         } catch (error) {
-            logger.error('Login password verification error:', error);
+            console.error('Login password verification error:', error);
             res.status(500).json({ error: 'Login failed' });
         }
     });
@@ -887,7 +887,7 @@ app.post('/login', authLimiter, [
 app.post('/logout', authenticateToken, (req, res) => {
     req.session.destroy((err) => {
         if (err) {
-            logger.error('Logout session destroy error:', err);
+            console.error('Logout session destroy error:', err);
             return res.status(500).json({ error: 'Logout failed' });
         }
         res.json({ message: 'Logged out successfully' });
@@ -908,7 +908,7 @@ app.post('/check-agency-profile', authenticateToken, [
 
     db.query('SELECT id FROM agency_details WHERE user_email = ?', [normalizedEmail], (err, result) => {
         if (err) {
-            logger.error('Check agency profile error:', err);
+            console.error('Check agency profile error:', err);
             return res.status(500).json({ error: 'Database error' });
         }
         res.json({ exists: result.length > 0 });
@@ -929,7 +929,7 @@ app.post('/check-industry-profile', authenticateToken, [
 
     db.query('SELECT id FROM industry_details WHERE user_email = ?', [normalizedEmail], (err, result) => {
         if (err) {
-            logger.error('Check industry profile error:', err);
+            console.error('Check industry profile error:', err);
             return res.status(500).json({ error: 'Database error' });
         }
         res.json({ exists: result.length > 0 });
@@ -969,7 +969,7 @@ app.post('/save-agency-profile', authenticateToken, [
         data.phone.trim()
     ], (err) => {
         if (err) {
-            logger.error('Save agency profile error:', err);
+            console.error('Save agency profile error:', err);
             return res.status(500).json({ error: 'Failed to save profile' });
         }
         res.json({ message: 'Profile saved successfully' });
@@ -1016,7 +1016,7 @@ app.post('/save-industry', authenticateToken, [
 
     db.query(checkSql, [payload[0]], (checkErr, rows) => {
         if (checkErr) {
-            logger.error('Industry profile check error:', checkErr);
+            console.error('Industry profile check error:', checkErr);
             return res.status(500).json({ error: 'Database error' });
         }
 
@@ -1047,7 +1047,7 @@ app.post('/save-industry', authenticateToken, [
 
         db.query(sql, queryParams, (err) => {
             if (err) {
-                logger.error('Save industry error:', err);
+                console.error('Save industry error:', err);
                 return res.status(500).json({ error: 'Database error' });
             }
 
@@ -1647,6 +1647,10 @@ app.post('/save-agency-report', async (req, res) => {
 
 // START SERVER
 if (process.env.VERCEL !== '1') {
+// CSRF Protection
+// const csrfProtection = csrf({ cookie: true });
+
+// HEALTH CHECK
 app.get('/health', (req, res) => {
     res.json({
         status: 'healthy',
@@ -1667,7 +1671,7 @@ app.get('/metrics', (req, res) => {
 
 // ERROR HANDLING MIDDLEWARE
 app.use((err, req, res, next) => {
-    logger.error('Unhandled error:', err);
+    console.error('Unhandled error:', err);
     res.status(500).json({ error: 'Internal server error' });
 });
 
@@ -1679,9 +1683,9 @@ app.use((req, res) => {
 // START SERVER
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, '0.0.0.0', () => {
-    logger.info(`EnviroMonitor server running on port ${PORT}`);
-    logger.info(`Health check available at http://localhost:${PORT}/health`);
-    logger.info(`Metrics available at http://localhost:${PORT}/metrics`);
+    console.log(`EnviroMonitor server running on port ${PORT}`);
+    console.log(`Health check available at http://localhost:${PORT}/health`);
+    console.log(`Metrics available at http://localhost:${PORT}/metrics`);
 });
 
 // GRACEFUL SHUTDOWN
@@ -1700,7 +1704,5 @@ process.on('SIGINT', () => {
         process.exit(0);
     });
 });
-
-}
 
 module.exports = app;
