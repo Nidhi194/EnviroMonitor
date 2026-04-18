@@ -205,6 +205,7 @@ async function login() {
 
         if (data.success) {
             localStorage.setItem("userEmail", data.email);
+            if (data.token) localStorage.setItem("authToken", data.token);
             let basePath = (window.location.protocol.startsWith('http') && window.location.pathname === '/') ? 'pages/' : '';
 
             if (data.role === "Industry") {
@@ -213,7 +214,10 @@ async function login() {
                 try {
                     let profileRes = await fetch("/check-agency-profile", {
                         method: "POST",
-                        headers: { "Content-Type": "application/json" },
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": "Bearer " + data.token
+                        },
                         body: JSON.stringify({ email: data.email })
                     });
                     let profileData = await profileRes.json();
@@ -250,10 +254,7 @@ async function login() {
 /* Shared Logic */
 window.logout = function() {
     localStorage.removeItem("userEmail");
-    let basePath = (window.location.protocol.startsWith('http') && window.location.pathname === '/') ? 'pages/' : '';
-    window.location.href = basePath ? 'index.html' : '../index.html'; 
-    // Usually logout sends to index.html, if we are in /pages/ we should probably just use 'index.html' if it's in the same folder.
-    // Wait, in the original code it was window.location.href = "h.html". I will keep it the same.
+    localStorage.removeItem("authToken");
     window.location.href = "index.html";
 };
 
@@ -404,10 +405,12 @@ window.saveAgencyProfile = async function() {
     }
 
     try {
+        const token = localStorage.getItem("authToken") || "";
         let res = await fetch("/save-agency-profile", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
             },
             body: JSON.stringify(data)
         });
@@ -551,10 +554,12 @@ async function saveData() {
     }
 
     try {
+        const token = localStorage.getItem("authToken") || "";
         let res = await fetch("/save-industry", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
             },
             body: JSON.stringify(data)
         });
@@ -1799,8 +1804,8 @@ async function saveAsDraft() {
 }
 
 function logout() {
-    localStorage.removeItem("loggedInUser");
-    localStorage.removeItem("userRole");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("authToken");
     window.location.href = "index.html";
 }
 

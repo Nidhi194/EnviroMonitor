@@ -297,7 +297,17 @@ html, body.page-landing {
     transform: translateY(30px);
     transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: opacity, transform;
+    /* Fallback: if JS fails, show anyway after 4s */
+    animation: fadeUpFallback 0.1s 4s forwards;
 }
+
+@keyframes fadeUpFallback {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .observe-fade-up.in-view {
     opacity: 1;
     transform: translateY(0);
